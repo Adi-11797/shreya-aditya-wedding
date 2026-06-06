@@ -582,8 +582,18 @@ footer .panel{
         <path d="M12 24 L20 32 L36 16" stroke="#b8862a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       <h3>Thank you</h3>
-      <p style="margin-bottom:0.5rem;font-family:'Jost',sans-serif;font-weight:300;color:var(--txt-mid);">Your RSVP has been received. We look forward to celebrating with you.</p>
+      <p style="margin-bottom:0.25rem;font-family:'Jost',sans-serif;font-weight:300;color:var(--txt-mid);">Your RSVP has been received.</p>
+      <p style="margin-bottom:0.5rem;font-family:'Jost',sans-serif;font-weight:300;color:var(--txt-mid);">We look forward to celebrating with you.</p>
       <p style="font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);font-size:1.15rem;margin-top:0.6rem;">&mdash; Shreya &amp; Aditya</p>
+    </div>
+    <div class="success-box" id="rsvpFallback" style="display:none;">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" style="margin:0 auto 1rem;display:block;">
+        <circle cx="24" cy="24" r="22" fill="none" stroke="#b8862a" stroke-width="1"/>
+        <path d="M24 14 L24 26" stroke="#b8862a" stroke-width="1.6" stroke-linecap="round"/>
+        <circle cx="24" cy="32" r="1.5" fill="#b8862a"/>
+      </svg>
+      <h3 style="font-size:1.6rem;">Something went wrong</h3>
+      <p style="font-family:'Jost',sans-serif;font-weight:300;color:var(--txt-mid);margin:0.6rem 0 1.4rem;">Our form couldn't submit right now. Please use the button below to send your RSVP by email instead — your details will be pre-filled.</p>
     </div>
   </div>
 </div>
@@ -643,6 +653,29 @@ sections.forEach(id => {
 
 // RSVP — posts to Google Apps Script web app, saves to Google Sheets
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzSXpuUXSwNSPt9hNvbd7LZL3IL6Je9zYrw1-a_K5ZLTqRXtJ18M1pbM3kmA852rtMogA/exec';
+const FALLBACK_EMAIL = 'adityaramakrishnan11@gmail.com'; // e.g. shreya.aditya2026@gmail.com
+
+function openMailtoFallback(data) {
+  const events = [
+    data.sangeet    === 'Yes' ? 'Sangeet' : null,
+    data.muhurtam   === 'Yes' ? 'Muhurtam' : null,
+  ].filter(Boolean).join(', ') || 'None';
+
+  const body = [
+    `Name: ${data.firstName} ${data.lastName}`,
+    `Email: ${data.email}`,
+    `Phone: ${data.phone}`,
+    `Attending: ${data.attending}`,
+    `Guests: ${data.guests}`,
+    `Events: ${events}`,
+    `Message: ${data.message || '—'}`,
+    `Submitted: ${data.submittedAt}`,
+  ].join('\n');
+
+  window.location.href = `mailto:${FALLBACK_EMAIL}`
+    + `?subject=${encodeURIComponent('RSVP — Shreya & Aditya')}`
+    + `&body=${encodeURIComponent(body)}`;
+}
 
 document.getElementById('rsvpForm').addEventListener('submit', async function(e) {
   e.preventDefault();
@@ -666,21 +699,26 @@ document.getElementById('rsvpForm').addEventListener('submit', async function(e)
   };
 
   try {
-    await fetch(SCRIPT_URL, {
+    const response = await fetch(SCRIPT_URL, {
       method: 'POST',
-      mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     });
-    // no-cors means we can't read the response, but if it didn't throw the POST went through
+    const result = await response.json();
+    if (result.result !== 'ok') throw new Error('Script returned error');
+
     form.style.display = 'none';
     const s = document.getElementById('rsvpSuccess');
     s.style.display = 'block';
     s.scrollIntoView({ behavior: 'smooth' });
+
   } catch (err) {
     btn.textContent = 'Send RSVP';
     btn.disabled = false;
-    alert('Something went wrong — please try again or contact us directly.');
+
+    const fallback = document.getElementById('rsvpFallback');
+    fallback.style.display = 'block';
+    fallback.querySelector('.fallback-send').onclick = () => openMailtoFallback(data);
   }
 });
 </script>
