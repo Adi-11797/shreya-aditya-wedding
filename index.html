@@ -32,6 +32,32 @@ body{
 /* ===============================
    BACKGROUND SCENE
 ================================ */
+/* Default (laptops/desktops) */
+:root{
+    --bg-scale: 0.85;
+}
+
+/* Very wide screens */
+@media (min-aspect-ratio: 16/9){
+    :root{
+        --bg-scale: 0.95;
+    }
+}
+
+/* Tablets */
+@media (max-aspect-ratio: 4/3){
+    :root{
+        --bg-scale: 0.7;
+    }
+}
+
+/* Phones */
+@media (max-aspect-ratio: 3/4){
+    :root{
+        --bg-scale: 0.6;
+    }
+}
+
 .bg-scene{
     position:fixed;
     inset:0;
@@ -52,31 +78,31 @@ body{
     position:absolute;
     left:0;
     bottom:0;
-    width:clamp(350px,42vw,900px);
+    width:calc(clamp(350px,42vw,900px) * var(--bg-scale));
     height:auto;
 }
 
 .bg-bottom-right{
     position:absolute;
     right:0;
-    bottom:0;
-    width:clamp(220px,28vw,550px);
+    bottom:-8%;
+    width:calc(clamp(220px,28vw,550px) * var(--bg-scale));
     height:auto;
 }
 
 .bg-top-right{
     position:absolute;
-    right:0;
-    top:0;
-    width:clamp(220px,26vw,600px);
+    right:-1%;
+    top:-1.5%;
+    width:calc(clamp(220px,26vw,600px) * var(--bg-scale));
     height:auto;
 }
 
 .bg-left-leaves{
     position:absolute;
     left:0;
-    top:24%;
-    width:clamp(120px,14vw,260px);
+    top:10%;
+    width:calc(clamp(120px,14vw,260px) * var(--bg-scale));
     height:auto;
     opacity:0.95;
 }
