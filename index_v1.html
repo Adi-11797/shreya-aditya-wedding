@@ -28,66 +28,19 @@ body{
   color:var(--txt);overflow-x:hidden;
   min-height:100vh;
 }
-
-/* ===============================
-   BACKGROUND SCENE
-================================ */
-.bg-scene{
-    position:fixed;
-    inset:0;
-    z-index:-1;
-    overflow:hidden;
-    pointer-events:none;
+body::after{
+  content:'';
+  position:fixed;inset:0;z-index:-1;
+  background-image:url("https://i.ibb.co/bM3Q3Ytw/Boss-Invite-landscape.png");
+  background-size:cover;
+  background-position:center calc(100% + 20px);
 }
-
-.bg-paper{
-    position:absolute;
-    inset:0;
-    background-image:url("images/paper-texture.webp");
-    background-size:cover;
-    background-position:center;
+@media (max-width:768px) and (orientation:portrait){
+  body::after{
+    background-image:url("https://i.ibb.co/R4gNJMc7/Boss-Invite.png");
+    background-position:center  calc(100% + 20px);
+  }
 }
-
-.bg-temple{
-    position:absolute;
-    left:0;
-    bottom:0;
-    width:clamp(350px,42vw,900px);
-    height:auto;
-}
-
-.bg-bottom-right{
-    position:absolute;
-    right:0;
-    bottom:0;
-    width:clamp(220px,28vw,550px);
-    height:auto;
-}
-
-.bg-top-right{
-    position:absolute;
-    right:0;
-    top:0;
-    width:clamp(220px,26vw,600px);
-    height:auto;
-}
-
-.bg-left-leaves{
-    position:absolute;
-    left:0;
-    top:24%;
-    width:clamp(120px,14vw,260px);
-    height:auto;
-    opacity:0.95;
-}
-
-@media (max-width:768px){
-    .bg-left-leaves{display:none;}
-    .bg-top-right{width:40vw;}
-    .bg-bottom-right{width:50vw;}
-    .bg-temple{width:80vw;}
-}
-
 
 /* Gold frame — fixed over everything */
 /* body::before{
@@ -420,15 +373,6 @@ footer .panel{
 </style>
 </head>
 <body>
-
-<div class="bg-scene">
-  <div class="bg-paper"></div>
-
-  <img class="bg-temple" src="images/temple-water.webp" alt="">
-  <img class="bg-top-right" src="images/top-right-flowers.webp" alt="">
-  <img class="bg-bottom-right" src="images/bottom-right-decor.webp" alt="">
-  <img class="bg-left-leaves" src="images/left-banana-leaves.webp" alt="">
-</div>
 
 <!-- ══════════════ HERO ══════════════ -->
 <!-- bg image shows fully here — no panel, just a centre glow -->
