@@ -537,7 +537,7 @@ footer .panel{
     <form class="rsvp-form" id="rsvpForm">
       <div class="f-row">
         <div class="f-group"><label>First Name</label><input type="text" placeholder="Ananya" required></div>
-        <div class="f-group"><label>Last Name</label><input type="text" placeholder="Bhat" required></div>
+        <div class="f-group"><label>Last Name</label><input type="text" placeholder="Iyer" required></div>
       </div>
       <div class="f-group"><label>Email Address</label><input type="email" placeholder="ananya@example.com" required></div>
       <div class="f-group"><label>Phone Number</label><input type="tel" placeholder="+91 98765 43210"></div>
@@ -563,8 +563,8 @@ footer .panel{
       <div class="f-group">
         <label>Which events will you attend?</label>
         <div class="check-block">
-          <label><input type="checkbox" name="ev_sangeet" value="yes" checked> Sangeet &mdash; 29 August, 7:00 PM</label>
-          <label><input type="checkbox" name="ev_muhurtam" value="yes" checked> Muhurtam &mdash; 30 August, 10:45 AM</label>
+          <label><input type="checkbox" checked> Sangeet &mdash; 29 August, 7:00 PM</label>
+          <label><input type="checkbox" checked> Muhurtam &mdash; 30 August, 10:45 AM</label>
         </div>
       </div>
       <div class="f-group">
@@ -641,47 +641,13 @@ sections.forEach(id => {
   if(el) activeIO.observe(el);
 });
 
-// RSVP — posts to Google Apps Script web app, saves to Google Sheets
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzSXpuUXSwNSPt9hNvbd7LZL3IL6Je9zYrw1-a_K5ZLTqRXtJ18M1pbM3kmA852rtMogA/exec';
-
-document.getElementById('rsvpForm').addEventListener('submit', async function(e) {
+// RSVP
+document.getElementById('rsvpForm').addEventListener('submit', function(e){
   e.preventDefault();
-
-  const btn = this.querySelector('.sub-btn');
-  btn.textContent = 'Sending…';
-  btn.disabled = true;
-
-  const form = e.target;
-  const data = {
-    firstName:  form.querySelector('input[placeholder="Ananya"]').value,
-    lastName:   form.querySelector('input[placeholder="Bhat"]').value,
-    email:      form.querySelector('input[type="email"]').value,
-    phone:      form.querySelector('input[type="tel"]').value,
-    attending:  form.querySelector('input[name="att"]:checked').value,
-    guests:     form.querySelector('select').value,
-    sangeet:    form.querySelector('input[name="ev_sangeet"]').checked ? 'Yes' : 'No',
-    muhurtam:   form.querySelector('input[name="ev_muhurtam"]').checked? 'Yes' : 'No',
-    message:    form.querySelector('textarea').value,
-    submittedAt: new Date().toLocaleString('en-IN', {timeZone:'Asia/Kolkata'})
-  };
-
-  try {
-    await fetch(SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    });
-    // no-cors means we can't read the response, but if it didn't throw the POST went through
-    form.style.display = 'none';
-    const s = document.getElementById('rsvpSuccess');
-    s.style.display = 'block';
-    s.scrollIntoView({ behavior: 'smooth' });
-  } catch (err) {
-    btn.textContent = 'Send RSVP';
-    btn.disabled = false;
-    alert('Something went wrong — please try again or contact us directly.');
-  }
+  this.style.display='none';
+  const s=document.getElementById('rsvpSuccess');
+  s.style.display='block';
+  s.scrollIntoView({behavior:'smooth'});
 });
 </script>
 </html>
