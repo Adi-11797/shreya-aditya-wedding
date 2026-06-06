@@ -22,31 +22,28 @@
 }
 html{scroll-behavior:smooth;}
 
-/* ── FIXED BG — the landscape image fills the entire viewport always ── */
-body{
-  font-family:'Jost',sans-serif;font-weight:300;
-  color:var(--txt);overflow-x:hidden;
-  min-height:100vh;
-}
-
 /* ===============================
    RESPONSIVE BACKGROUND IMAGE
 ================================ */
 
-body{
-    font-family:'Jost',sans-serif;
-    font-weight:300;
-    color:var(--txt);
-    overflow-x:hidden;
-    min-height:100vh;
+body {
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  color: var(--txt);
+  overflow-x: hidden;
+  min-height: 100vh;
+  position: relative; /* needed for ::before */
+}
 
-    background-repeat:no-repeat;
-    background-position:center center;
-    background-size:cover;
-    background-attachment:fixed;
-
-    /* Default desktop */
-    background-image:url("images/bg-16x9.webp");
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-image: url("images/bg-16x9.webp"); /* default */
 }
 
 
@@ -101,10 +98,8 @@ body{
    19.5:9 devices
 ========================================== */
 
-@media (max-width: 430px){
-    body{
-        background-image:url("images/bg-9x19.webp");
-    }
+@media (max-aspect-ratio: 0.50/1) and (min-aspect-ratio: 0.44/1) {
+    body::after { background-image: url("images/bg-9x19.webp"); }
 }
 
 
@@ -113,12 +108,8 @@ body{
    S24 Ultra, Pixel, etc.
 ========================================== */
 
-@media (max-width: 412px)
-       and (orientation: portrait)
-       and (max-aspect-ratio: 0.45/1){
-    body{
-        background-image:url("images/bg-9x21.webp");
-    }
+@media (max-aspect-ratio: 0.44/1) {
+    body::after { background-image: url("images/bg-9x21.webp"); }
 }
 
 /* Gold frame — fixed over everything */
@@ -731,43 +722,4 @@ document.getElementById('rsvpForm').addEventListener('submit', function(e){
   s.scrollIntoView({behavior:'smooth'});
 });
 </script>
-<script>
-(function () {
-    const w = window.innerWidth;
-    const h = window.innerHeight;
-    const ratio = (w / h).toFixed(4);
-
-    let bg = getComputedStyle(document.body).backgroundImage;
-
-    const debug = document.createElement('div');
-    debug.style.position = 'fixed';
-    debug.style.top = '10px';
-    debug.style.left = '10px';
-    debug.style.zIndex = '999999';
-    debug.style.background = 'rgba(0,0,0,0.9)';
-    debug.style.color = '#fff';
-    debug.style.padding = '12px';
-    debug.style.fontFamily = 'monospace';
-    debug.style.fontSize = '12px';
-    debug.style.lineHeight = '1.5';
-    debug.style.maxWidth = '300px';
-
-    debug.innerHTML = `
-        width: ${w}<br>
-        height: ${h}<br>
-        ratio: ${ratio}<br>
-        background: ${bg}
-    `;
-
-    document.body.appendChild(debug);
-
-    console.log({
-        width: w,
-        height: h,
-        ratio,
-        background: bg
-    });
-})();
-</script>
-</body>
 </html>
