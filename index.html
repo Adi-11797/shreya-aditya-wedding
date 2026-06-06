@@ -139,14 +139,14 @@ nav button:hover,nav button.active{color:var(--gold);}
   /* No background — the body fixed bg shows through */
 }
 /* Very subtle center glow for text legibility on the hero */
-#pg-home::before{
+/* #pg-home::before{
   content:'';position:absolute;inset:0;
   background:radial-gradient(ellipse 50% 55% at 50% 48%,
     rgba(246,236,218,0.62) 0%,
     rgba(246,236,218,0.2) 55%,
     transparent 100%);
   pointer-events:none;
-}
+} */
 
 .hero-inner{
   position:relative;z-index:2;text-align:center;
@@ -438,7 +438,7 @@ footer .panel{
     <p class="hero-date">29 &amp; 30 August 2026</p>
     <p class="hero-venue">The Peacock Grove, Bangalore</p>
     <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;">
-      <button class="btn btn-solid" onclick="goTo('pg-invite')">Invitation</button>
+      <button class="btn btn-ghost" onclick="goTo('pg-invite')">Invitation</button>
       <button class="btn btn-solid" onclick="goTo('pg-rsvp')">RSVP</button>
     </div>
   </div>
