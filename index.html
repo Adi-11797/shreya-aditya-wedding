@@ -731,5 +731,43 @@ document.getElementById('rsvpForm').addEventListener('submit', function(e){
   s.scrollIntoView({behavior:'smooth'});
 });
 </script>
+<script>
+(function () {
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const ratio = (w / h).toFixed(4);
+
+    let bg = getComputedStyle(document.body).backgroundImage;
+
+    const debug = document.createElement('div');
+    debug.style.position = 'fixed';
+    debug.style.top = '10px';
+    debug.style.left = '10px';
+    debug.style.zIndex = '999999';
+    debug.style.background = 'rgba(0,0,0,0.9)';
+    debug.style.color = '#fff';
+    debug.style.padding = '12px';
+    debug.style.fontFamily = 'monospace';
+    debug.style.fontSize = '12px';
+    debug.style.lineHeight = '1.5';
+    debug.style.maxWidth = '300px';
+
+    debug.innerHTML = `
+        width: ${w}<br>
+        height: ${h}<br>
+        ratio: ${ratio}<br>
+        background: ${bg}
+    `;
+
+    document.body.appendChild(debug);
+
+    console.log({
+        width: w,
+        height: h,
+        ratio,
+        background: bg
+    });
+})();
+</script>
 </body>
 </html>
