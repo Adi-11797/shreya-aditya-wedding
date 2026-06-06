@@ -32,9 +32,9 @@ body {
   color: var(--txt);
   overflow-x: hidden;
   min-height: 100vh;
-  position: relative; /* needed for ::before */
 }
 
+/* Fixed background via ::after — avoids iOS background-attachment:fixed bug */
 body::after {
   content: '';
   position: fixed;
@@ -43,73 +43,38 @@ body::after {
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
-  background-image: url("images/bg-16x9.webp"); /* default */
+  /* Default: wide desktop */
+  background-image: url("images/bg-16x9.webp");
 }
 
-
-/* ==========================================
-   4:3
-   iPads, older tablets, small laptops
-========================================== */
-
-@media (max-aspect-ratio: 1.45/1) and (min-aspect-ratio: 1.15/1){
-    body{
-        background-image:url("images/bg-4x3.webp");
-    }
+/* 4:3 — iPads, older tablets, small laptops */
+@media (max-aspect-ratio: 1.45/1) and (min-aspect-ratio: 1.15/1) {
+  body::after { background-image: url("images/bg-4x3.webp"); }
 }
 
-
-/* ==========================================
-   1:1
-========================================== */
-
-@media (max-aspect-ratio: 1.15/1) and (min-aspect-ratio: 0.85/1){
-    body{
-        background-image:url("images/bg-1x1.webp");
-    }
+/* 1:1 */
+@media (max-aspect-ratio: 1.15/1) and (min-aspect-ratio: 0.85/1) {
+  body::after { background-image: url("images/bg-1x1.webp"); }
 }
 
-
-/* ==========================================
-   3:4
-========================================== */
-
-@media (max-aspect-ratio: 0.85/1) and (min-aspect-ratio: 0.62/1){
-    body{
-        background-image:url("images/bg-3x4.webp");
-    }
+/* 3:4 */
+@media (max-aspect-ratio: 0.85/1) and (min-aspect-ratio: 0.62/1) {
+  body::after { background-image: url("images/bg-3x4.webp"); }
 }
 
-
-/* ==========================================
-   9:16
-   Most Android portrait phones
-========================================== */
-
-@media (max-aspect-ratio: 0.62/1) and (min-aspect-ratio: 0.50/1){
-    body{
-        background-image:url("images/bg-9x16.webp");
-    }
+/* 9:16 — most Android portrait phones */
+@media (max-aspect-ratio: 0.62/1) and (min-aspect-ratio: 0.50/1) {
+  body::after { background-image: url("images/bg-9x16.webp"); }
 }
 
-
-/* ==========================================
-   iPhone 12/13/14/15/16 family
-   19.5:9 devices
-========================================== */
-
+/* 9:19 — iPhone 12/13/14/15/16 family */
 @media (max-aspect-ratio: 0.50/1) and (min-aspect-ratio: 0.44/1) {
-    body::after { background-image: url("images/bg-9x19.webp"); }
+  body::after { background-image: url("images/bg-9x19.webp"); }
 }
 
-
-/* ==========================================
-   Extra tall Androids
-   S24 Ultra, Pixel, etc.
-========================================== */
-
+/* 9:21 — extra tall Androids (S24 Ultra, Pixel, etc.) */
 @media (max-aspect-ratio: 0.44/1) {
-    body::after { background-image: url("images/bg-9x21.webp"); }
+  body::after { background-image: url("images/bg-9x21.webp"); }
 }
 
 /* Gold frame — fixed over everything */
