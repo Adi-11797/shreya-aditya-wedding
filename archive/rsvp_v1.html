@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>RSVP — Shreya &amp; Aditya</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Cormorant+SC:wght@300;400;500&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --cream:#f7ede2;
+  --parch:rgba(246,236,218,0.92);
+  --gold:#b8862a;
+  --gold-lt:#d4a84b;
+  --brown:#3b1e07;
+  --brown-mid:#7a4f28;
+  --txt:#2e1a06;
+  --txt-mid:#6b4e2e;
+  --txt-lt:#8a6840;
+}
+
+html,body{
+  height:100%;
+  overflow:hidden;
+  font-family:'Jost',sans-serif;
+  font-weight:300;
+  color:var(--txt);
+}
+
+/* ─── BACKGROUND ─── */
+body{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background-color:#f0e6d3;
+  position:relative;
+}
+
+/* SVG botanical background */
+.bg-art{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:0;
+}
+
+/* ─── CARD ─── */
+.card{
+  position:relative;
+  z-index:10;
+  width:min(520px, calc(100vw - 2rem));
+  max-height:calc(100vh - 2rem);
+  overflow-y:auto;
+  background:var(--parch);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border:1px solid rgba(184,134,42,0.28);
+  padding:2.2rem 2.4rem 2rem;
+  /* Thin inner border */
+  outline:1px solid rgba(184,134,42,0.13);
+  outline-offset:-10px;
+  /* Subtle shadow */
+  box-shadow:0 24px 80px rgba(59,30,7,0.18), 0 4px 16px rgba(59,30,7,0.1);
+  /* Fade in */
+  animation:cardIn 0.9s cubic-bezier(0.22,1,0.36,1) both;
+}
+@keyframes cardIn{
+  from{opacity:0;transform:translateY(18px) scale(0.985);}
+  to{opacity:1;transform:translateY(0) scale(1);}
+}
+
+/* Scrollbar inside card on small screens */
+.card::-webkit-scrollbar{width:4px;}
+.card::-webkit-scrollbar-track{background:transparent;}
+.card::-webkit-scrollbar-thumb{background:rgba(184,134,42,0.3);border-radius:2px;}
+
+/* ─── HEADER ─── */
+.header{text-align:center;margin-bottom:1.4rem;}
+.lbl{
+  font-family:'Cormorant SC',serif;font-weight:300;
+  font-size:0.6rem;letter-spacing:0.45em;color:var(--gold);
+  display:block;margin-bottom:0.3rem;
+}
+.names{
+  font-family:'Cormorant Garamond',serif;font-weight:300;
+  font-size:2rem;color:var(--brown);line-height:1.1;
+}
+.names em{font-style:italic;color:var(--gold);}
+.sub{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:0.88rem;color:var(--txt-lt);margin-top:0.2rem;
+}
+
+/* ─── DIVIDER ─── */
+.divr{
+  display:flex;align-items:center;gap:0.75rem;
+  justify-content:center;margin:0.9rem auto;max-width:180px;
+}
+.divr::before,.divr::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(to right,transparent,rgba(184,134,42,0.45));
+}
+.divr::after{background:linear-gradient(to left,transparent,rgba(184,134,42,0.45));}
+.divr-gem{width:4px;height:4px;background:var(--gold);transform:rotate(45deg);opacity:0.7;flex-shrink:0;}
+
+/* ─── FORM ─── */
+.rsvp-form{display:flex;flex-direction:column;gap:0.85rem;}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;}
+.f-group{display:flex;flex-direction:column;gap:0.32rem;}
+.f-group label{
+  font-family:'Cormorant SC',serif;font-weight:300;
+  font-size:0.55rem;letter-spacing:0.25em;color:var(--txt-mid);
+}
+.f-group input,.f-group select,.f-group textarea{
+  background:rgba(250,242,228,0.9);
+  border:1px solid rgba(184,134,42,0.24);
+  padding:0.62rem 0.85rem;
+  font-family:'Cormorant Garamond',serif;font-size:0.95rem;
+  color:var(--txt);outline:none;
+  transition:border-color 0.2s;width:100%;appearance:none;border-radius:0;
+}
+.f-group input:focus,.f-group select:focus,.f-group textarea:focus{
+  border-color:var(--gold);background:rgba(255,248,236,0.97);
+}
+.f-group textarea{resize:none;height:64px;font-size:0.92rem;}
+
+/* Attend toggle */
+.toggle-row{display:flex;border:1px solid rgba(184,134,42,0.24);overflow:hidden;}
+.toggle-row input[type=radio]{display:none;}
+.toggle-row label{
+  flex:1;text-align:center;padding:0.65rem;cursor:pointer;
+  font-family:'Cormorant SC',serif;font-weight:300;
+  font-size:0.6rem;letter-spacing:0.18em;color:var(--txt-mid);transition:all 0.2s;
+}
+.toggle-row input[type=radio]:checked + label{background:var(--gold);color:var(--cream);}
+.toggle-row label:last-of-type{border-left:1px solid rgba(184,134,42,0.24);}
+
+/* Checkboxes */
+.check-block{
+  display:flex;flex-direction:column;gap:0.38rem;padding:0.75rem;
+  background:rgba(250,242,228,0.9);border:1px solid rgba(184,134,42,0.24);
+}
+.check-block input[type=checkbox]{display:none;}
+.check-block label{
+  display:flex;align-items:center;gap:0.6rem;
+  font-family:'Cormorant Garamond',serif;font-size:0.9rem;
+  color:var(--txt-mid);cursor:pointer;
+  padding:0.4rem 0.6rem;border:1px solid transparent;transition:all 0.2s;
+}
+.check-block label:has(input:checked){
+  border-color:var(--gold);background:rgba(184,134,42,0.07);color:var(--brown);
+}
+.check-block label::before{content:'○';color:rgba(184,134,42,0.4);flex-shrink:0;font-size:0.82rem;}
+.check-block label:has(input:checked)::before{content:'✓';color:var(--gold);}
+
+/* Submit row */
+.submit-row{
+  display:flex;justify-content:center;gap:0.65rem;margin-top:0.25rem;flex-wrap:wrap;
+}
+.sub-btn{
+  font-family:'Cormorant SC',serif;font-weight:400;font-size:0.68rem;
+  letter-spacing:0.28em;color:var(--cream);background:var(--brown);
+  border:1px solid var(--brown);padding:0.85rem 2.2rem;
+  cursor:pointer;transition:all 0.25s;border-radius:0;
+}
+.sub-btn:hover{background:var(--gold);border-color:var(--gold);}
+.sub-btn:disabled{opacity:0.6;cursor:not-allowed;}
+
+.cal-btn{
+  font-family:'Cormorant SC',serif;font-weight:400;font-size:0.68rem;
+  letter-spacing:0.28em;color:var(--brown);background:transparent;
+  border:1px solid rgba(184,134,42,0.35);padding:0.85rem 2.2rem;
+  cursor:pointer;transition:all 0.25s;border-radius:0;
+}
+.cal-btn:hover{background:rgba(184,134,42,0.07);}
+
+/* Success / fallback */
+.success-box{
+  display:none;text-align:center;padding:2rem 1rem;animation:cardIn 0.7s ease both;
+}
+.success-box h3{
+  font-family:'Cormorant Garamond',serif;font-weight:300;
+  font-size:2rem;color:var(--brown);margin:0.6rem 0 0.4rem;
+}
+.success-box p{
+  font-family:'Jost',sans-serif;font-weight:300;
+  color:var(--txt-mid);font-size:0.88rem;line-height:1.7;
+}
+.success-box .sig{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  color:var(--gold);font-size:1.1rem;margin-top:0.8rem;
+}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:480px){
+  .card{padding:1.6rem 1.3rem 1.5rem;outline-offset:-7px;}
+  .f-row{grid-template-columns:1fr;}
+  .names{font-size:1.65rem;}
+}
+@media(max-height:680px){
+  .card{padding:1.4rem 2rem 1.4rem;}
+  .header{margin-bottom:0.9rem;}
+  .divr{margin:0.55rem auto;}
+  .rsvp-form{gap:0.65rem;}
+}
+
+/* Reduced motion */
+@media(prefers-reduced-motion:reduce){
+  .card{animation:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ BOTANICAL SVG BACKGROUND ══════════ -->
+<svg class="bg-art" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Parchment gradient -->
+    <radialGradient id="bg-grad" cx="50%" cy="45%" r="70%">
+      <stop offset="0%" stop-color="#f5e8d3"/>
+      <stop offset="60%" stop-color="#eedcc4"/>
+      <stop offset="100%" stop-color="#e5d0b0"/>
+    </radialGradient>
+    <!-- Vignette -->
+    <radialGradient id="vignette" cx="50%" cy="50%" r="70%">
+      <stop offset="40%" stop-color="transparent"/>
+      <stop offset="100%" stop-color="rgba(88,52,18,0.22)"/>
+    </radialGradient>
+    <!-- Leaf shape -->
+    <path id="leaf-sm" d="M0,-14 C5,-8 7,0 0,12 C-7,0 -5,-8 0,-14Z"/>
+    <path id="leaf-md" d="M0,-22 C8,-12 10,0 0,18 C-10,0 -8,-12 0,-22Z"/>
+    <path id="leaf-lg" d="M0,-32 C12,-18 14,0 0,26 C-14,0 -12,-18 0,-32Z"/>
+    <!-- Petal -->
+    <path id="petal" d="M0,-9 C3,-5 3,2 0,8 C-3,2 -3,-5 0,-9Z"/>
+  </defs>
+
+  <!-- Base parchment -->
+  <rect width="1200" height="800" fill="url(#bg-grad)"/>
+
+  <!-- Subtle aged texture lines -->
+  <g opacity="0.04" stroke="#7a4f28" stroke-width="0.5" fill="none">
+    <line x1="0" y1="130" x2="1200" y2="145"/>
+    <line x1="0" y1="320" x2="1200" y2="308"/>
+    <line x1="0" y1="510" x2="1200" y2="525"/>
+    <line x1="0" y1="700" x2="1200" y2="688"/>
+  </g>
+
+  <!-- ═══ TOP-LEFT CORNER SPRAY ═══ -->
+  <g transform="translate(0,0)" opacity="0.82">
+    <!-- Main branch -->
+    <path d="M20,20 C60,55 110,80 165,105" stroke="#8a7252" stroke-width="1.4" fill="none"/>
+    <path d="M20,20 C80,40 130,35 185,50" stroke="#8a7252" stroke-width="1.1" fill="none"/>
+    <path d="M20,20 C50,70 55,120 70,168" stroke="#8a7252" stroke-width="1.1" fill="none"/>
+
+    <!-- Sub-branches -->
+    <path d="M75,68 C100,55 125,48 148,55" stroke="#9a8262" stroke-width="0.8" fill="none"/>
+    <path d="M110,88 C120,115 118,140 125,162" stroke="#9a8262" stroke-width="0.8" fill="none"/>
+    <path d="M60,105 C85,95 108,100 130,110" stroke="#9a8262" stroke-width="0.7" fill="none"/>
+
+    <!-- Leaves on main branch -->
+    <g fill="#7d8f5e" opacity="0.75">
+      <use href="#leaf-md" transform="translate(55,50) rotate(-35)"/>
+      <use href="#leaf-sm" transform="translate(88,68) rotate(20)"/>
+      <use href="#leaf-md" transform="translate(120,85) rotate(-55)"/>
+      <use href="#leaf-sm" transform="translate(155,100) rotate(15)"/>
+      <use href="#leaf-lg" transform="translate(45,90) rotate(-20)"/>
+      <use href="#leaf-sm" transform="translate(72,128) rotate(40)"/>
+      <use href="#leaf-md" transform="translate(35,148) rotate(-70)"/>
+      <use href="#leaf-sm" transform="translate(60,170) rotate(10)"/>
+    </g>
+
+    <!-- Leaves on sub-branches -->
+    <g fill="#6b7d4e" opacity="0.65">
+      <use href="#leaf-sm" transform="translate(98,55) rotate(-25)"/>
+      <use href="#leaf-sm" transform="translate(130,52) rotate(15)"/>
+      <use href="#leaf-sm" transform="translate(152,58) rotate(-40)"/>
+      <use href="#leaf-sm" transform="translate(118,142) rotate(25)"/>
+      <use href="#leaf-sm" transform="translate(128,165) rotate(-15)"/>
+    </g>
+
+    <!-- Flower clusters -->
+    <g fill="#c9907a" opacity="0.7">
+      <use href="#petal" transform="translate(162,48) rotate(0)"/>
+      <use href="#petal" transform="translate(162,48) rotate(72)"/>
+      <use href="#petal" transform="translate(162,48) rotate(144)"/>
+      <use href="#petal" transform="translate(162,48) rotate(216)"/>
+      <use href="#petal" transform="translate(162,48) rotate(288)"/>
+      <circle cx="162" cy="48" r="2.2" fill="#e8c070" opacity="0.9"/>
+    </g>
+    <g fill="#c9907a" opacity="0.65">
+      <use href="#petal" transform="translate(132,108) rotate(18)"/>
+      <use href="#petal" transform="translate(132,108) rotate(90)"/>
+      <use href="#petal" transform="translate(132,108) rotate(162)"/>
+      <use href="#petal" transform="translate(132,108) rotate(234)"/>
+      <use href="#petal" transform="translate(132,108) rotate(306)"/>
+      <circle cx="132" cy="108" r="2" fill="#e8c070" opacity="0.9"/>
+    </g>
+    <g fill="#d4a070" opacity="0.6">
+      <use href="#petal" transform="translate(75,172) rotate(30)"/>
+      <use href="#petal" transform="translate(75,172) rotate(102)"/>
+      <use href="#petal" transform="translate(75,172) rotate(174)"/>
+      <use href="#petal" transform="translate(75,172) rotate(246)"/>
+      <use href="#petal" transform="translate(75,172) rotate(318)"/>
+      <circle cx="75" cy="172" r="1.8" fill="#e8c070" opacity="0.9"/>
+    </g>
+
+    <!-- Hanging bell flowers top-left -->
+    <g opacity="0.72">
+      <path d="M150,55 C152,70 150,85 148,98" stroke="#9a8262" stroke-width="0.7" fill="none"/>
+      <path d="M145,72 C147,80 146,90 144,100" stroke="#9a8262" stroke-width="0.6" fill="none"/>
+      <!-- Bell shapes -->
+      <ellipse cx="148" cy="102" rx="4" ry="6" fill="#b8865a" opacity="0.75"/>
+      <ellipse cx="144" cy="104" rx="3" ry="5" fill="#c9907a" opacity="0.7"/>
+      <!-- Triangular pendants (like the invite art) -->
+      <polygon points="148,108 145,116 151,116" fill="#b8862a" opacity="0.55"/>
+      <polygon points="144,109 141,116 147,116" fill="#c9907a" opacity="0.5"/>
+    </g>
+  </g>
+
+  <!-- ═══ TOP-RIGHT CORNER SPRAY ═══ -->
+  <g transform="translate(1200,0) scale(-1,1)" opacity="0.82">
+    <path d="M20,20 C60,55 110,80 165,105" stroke="#8a7252" stroke-width="1.4" fill="none"/>
+    <path d="M20,20 C80,40 130,35 185,50" stroke="#8a7252" stroke-width="1.1" fill="none"/>
+    <path d="M20,20 C50,70 55,120 70,168" stroke="#8a7252" stroke-width="1.1" fill="none"/>
+    <path d="M75,68 C100,55 125,48 148,55" stroke="#9a8262" stroke-width="0.8" fill="none"/>
+    <path d="M110,88 C120,115 118,140 125,162" stroke="#9a8262" stroke-width="0.8" fill="none"/>
+    <path d="M60,105 C85,95 108,100 130,110" stroke="#9a8262" stroke-width="0.7" fill="none"/>
+    <g fill="#7d8f5e" opacity="0.75">
+      <use href="#leaf-md" transform="translate(55,50) rotate(-35)"/>
+      <use href="#leaf-sm" transform="translate(88,68) rotate(20)"/>
+      <use href="#leaf-md" transform="translate(120,85) rotate(-55)"/>
+      <use href="#leaf-sm" transform="translate(155,100) rotate(15)"/>
+      <use href="#leaf-lg" transform="translate(45,90) rotate(-20)"/>
+      <use href="#leaf-sm" transform="translate(72,128) rotate(40)"/>
+      <use href="#leaf-md" transform="translate(35,148) rotate(-70)"/>
+      <use href="#leaf-sm" transform="translate(60,170) rotate(10)"/>
+    </g>
+    <g fill="#6b7d4e" opacity="0.65">
+      <use href="#leaf-sm" transform="translate(98,55) rotate(-25)"/>
+      <use href="#leaf-sm" transform="translate(130,52) rotate(15)"/>
+      <use href="#leaf-sm" transform="translate(152,58) rotate(-40)"/>
+      <use href="#leaf-sm" transform="translate(118,142) rotate(25)"/>
+      <use href="#leaf-sm" transform="translate(128,165) rotate(-15)"/>
+    </g>
+    <g fill="#c9907a" opacity="0.7">
+      <use href="#petal" transform="translate(162,48) rotate(0)"/>
+      <use href="#petal" transform="translate(162,48) rotate(72)"/>
+      <use href="#petal" transform="translate(162,48) rotate(144)"/>
+      <use href="#petal" transform="translate(162,48) rotate(216)"/>
+      <use href="#petal" transform="translate(162,48) rotate(288)"/>
+      <circle cx="162" cy="48" r="2.2" fill="#e8c070" opacity="0.9"/>
+    </g>
+    <g fill="#c9907a" opacity="0.65">
+      <use href="#petal" transform="translate(132,108) rotate(18)"/>
+      <use href="#petal" transform="translate(132,108) rotate(90)"/>
+      <use href="#petal" transform="translate(132,108) rotate(162)"/>
+      <use href="#petal" transform="translate(132,108) rotate(234)"/>
+      <use href="#petal" transform="translate(132,108) rotate(306)"/>
+      <circle cx="132" cy="108" r="2" fill="#e8c070" opacity="0.9"/>
+    </g>
+    <g fill="#d4a070" opacity="0.6">
+      <use href="#petal" transform="translate(75,172) rotate(30)"/>
+      <use href="#petal" transform="translate(75,172) rotate(102)"/>
+      <use href="#petal" transform="translate(75,172) rotate(174)"/>
+      <use href="#petal" transform="translate(75,172) rotate(246)"/>
+      <use href="#petal" transform="translate(75,172) rotate(318)"/>
+      <circle cx="75" cy="172" r="1.8" fill="#e8c070" opacity="0.9"/>
+    </g>
+    <g opacity="0.72">
+      <path d="M150,55 C152,70 150,85 148,98" stroke="#9a8262" stroke-width="0.7" fill="none"/>
+      <path d="M145,72 C147,80 146,90 144,100" stroke="#9a8262" stroke-width="0.6" fill="none"/>
+      <ellipse cx="148" cy="102" rx="4" ry="6" fill="#b8865a" opacity="0.75"/>
+      <ellipse cx="144" cy="104" rx="3" ry="5" fill="#c9907a" opacity="0.7"/>
+      <polygon points="148,108 145,116 151,116" fill="#b8862a" opacity="0.55"/>
+      <polygon points="144,109 141,116 147,116" fill="#c9907a" opacity="0.5"/>
+    </g>
+  </g>
+
+  <!-- ═══ BOTTOM-LEFT PALM FROND ═══ -->
+  <g transform="translate(0,800)" opacity="0.70">
+    <path d="M15,0 C30,-40 50,-90 80,-140" stroke="#8a7252" stroke-width="1.3" fill="none"/>
+    <path d="M15,0 C60,-30 100,-55 145,-70" stroke="#8a7252" stroke-width="1.1" fill="none"/>
+    <!-- Palm frond leaves radiating out -->
+    <g fill="#6b7d4e" opacity="0.7">
+      <path d="M40,-55 C55,-65 70,-60 75,-48 C60,-45 45,-48 40,-55Z"/>
+      <path d="M55,-80 C70,-95 88,-92 92,-78 C76,-73 60,-75 55,-80Z"/>
+      <path d="M68,-108 C80,-125 100,-125 105,-110 C88,-104 72,-106 68,-108Z"/>
+      <path d="M80,-132 C90,-152 110,-154 115,-138 C98,-130 82,-132 80,-132Z"/>
+      <path d="M55,-40 C75,-32 88,-20 82,-8 C68,-14 54,-26 55,-40Z"/>
+      <path d="M95,-52 C115,-46 130,-34 125,-22 C110,-28 95,-40 95,-52Z"/>
+      <path d="M125,-62 C145,-58 160,-46 155,-32 C140,-38 124,-50 125,-62Z"/>
+    </g>
+    <!-- Accent flowers -->
+    <g fill="#c9907a" opacity="0.6">
+      <use href="#petal" transform="translate(148,-68) rotate(0)"/>
+      <use href="#petal" transform="translate(148,-68) rotate(72)"/>
+      <use href="#petal" transform="translate(148,-68) rotate(144)"/>
+      <use href="#petal" transform="translate(148,-68) rotate(216)"/>
+      <use href="#petal" transform="translate(148,-68) rotate(288)"/>
+      <circle cx="148" cy="-68" r="2" fill="#e8c070" opacity="0.85"/>
+    </g>
+  </g>
+
+  <!-- ═══ BOTTOM-RIGHT PALM FROND ═══ -->
+  <g transform="translate(1200,800) scale(-1,1)" opacity="0.70">
+    <path d="M15,0 C30,-40 50,-90 80,-140" stroke="#8a7252" stroke-width="1.3" fill="none"/>
+    <path d="M15,0 C60,-30 100,-55 145,-70" stroke="#8a7252" stroke-width="1.1" fill="none"/>
+    <g fill="#6b7d4e" opacity="0.7">
+      <path d="M40,-55 C55,-65 70,-60 75,-48 C60,-45 45,-48 40,-55Z"/>
+      <path d="M55,-80 C70,-95 88,-92 92,-78 C76,-73 60,-75 55,-80Z"/>
+      <path d="M68,-108 C80,-125 100,-125 105,-110 C88,-104 72,-106 68,-108Z"/>
+      <path d="M80,-132 C90,-152 110,-154 115,-138 C98,-130 82,-132 80,-132Z"/>
+      <path d="M55,-40 C75,-32 88,-20 82,-8 C68,-14 54,-26 55,-40Z"/>
+      <path d="M95,-52 C115,-46 130,-34 125,-22 C110,-28 95,-40 95,-52Z"/>
+      <path d="M125,-62 C145,-58 160,-46 155,-32 C140,-38 124,-50 125,-62Z"/>
+    </g>
+    <g fill="#c9907a" opacity="0.6">
+      <use href="#petal" transform="translate(148,-68) rotate(0)"/>
+      <use href="#petal" transform="translate(148,-68) rotate(72)"/>
+      <use href="#petal" transform="translate(148,-68) rotate(144)"/>
+      <use href="#petal" transform="translate(148,-68) rotate(216)"/>
+      <use href="#petal" transform="translate(148,-68) rotate(288)"/>
+      <circle cx="148" cy="-68" r="2" fill="#e8c070" opacity="0.85"/>
+    </g>
+  </g>
+
+  <!-- ═══ SCATTERED SMALL MOTIFS ═══ -->
+  <!-- Mid-left trailing vine -->
+  <g transform="translate(0,400)" opacity="0.42">
+    <path d="M0,0 C25,-15 40,-30 55,-50" stroke="#9a8262" stroke-width="0.8" fill="none"/>
+    <path d="M0,0 C20,18 35,38 48,55" stroke="#9a8262" stroke-width="0.8" fill="none"/>
+    <use href="#leaf-sm" transform="translate(30,-25) rotate(-45)" fill="#7d8f5e"/>
+    <use href="#leaf-sm" transform="translate(50,-48) rotate(20)" fill="#7d8f5e"/>
+    <use href="#leaf-sm" transform="translate(25,38) rotate(55)" fill="#7d8f5e"/>
+    <use href="#leaf-sm" transform="translate(45,52) rotate(-20)" fill="#7d8f5e"/>
+  </g>
+  <!-- Mid-right trailing vine -->
+  <g transform="translate(1200,400) scale(-1,1)" opacity="0.42">
+    <path d="M0,0 C25,-15 40,-30 55,-50" stroke="#9a8262" stroke-width="0.8" fill="none"/>
+    <path d="M0,0 C20,18 35,38 48,55" stroke="#9a8262" stroke-width="0.8" fill="none"/>
+    <use href="#leaf-sm" transform="translate(30,-25) rotate(-45)" fill="#7d8f5e"/>
+    <use href="#leaf-sm" transform="translate(50,-48) rotate(20)" fill="#7d8f5e"/>
+    <use href="#leaf-sm" transform="translate(25,38) rotate(55)" fill="#7d8f5e"/>
+    <use href="#leaf-sm" transform="translate(45,52) rotate(-20)" fill="#7d8f5e"/>
+  </g>
+
+  <!-- Tiny scattered dots / seeds -->
+  <g fill="#b8862a" opacity="0.18">
+    <circle cx="210" cy="220" r="1.5"/>
+    <circle cx="980" cy="190" r="1.5"/>
+    <circle cx="180" cy="580" r="1.2"/>
+    <circle cx="1010" cy="600" r="1.2"/>
+    <circle cx="320" cy="740" r="1.3"/>
+    <circle cx="880" cy="720" r="1.3"/>
+  </g>
+
+  <!-- Gold border frame lines -->
+  <rect x="18" y="18" width="1164" height="764" fill="none" stroke="rgba(184,134,42,0.18)" stroke-width="1"/>
+  <rect x="26" y="26" width="1148" height="748" fill="none" stroke="rgba(184,134,42,0.08)" stroke-width="0.5"/>
+
+  <!-- Vignette overlay -->
+  <rect width="1200" height="800" fill="url(#vignette)"/>
+</svg>
+
+
+<!-- ══════════ RSVP CARD ══════════ -->
+<div class="card">
+
+  <div class="header">
+    <span class="lbl">Joyfully Celebrating</span>
+    <p class="names">Shreya <em>&amp;</em> Aditya</p>
+    <p class="sub">The Peacock Grove, Bengaluru &nbsp;·&nbsp; 29–30 August 2026</p>
+  </div>
+
+  <div class="divr"><span class="divr-gem"></span></div>
+
+  <!-- Form -->
+  <form class="rsvp-form" id="rsvpForm" novalidate>
+
+    <div class="f-row">
+      <div class="f-group">
+        <label>First Name</label>
+        <input type="text" name="firstName" placeholder="Ananya" required>
+      </div>
+      <div class="f-group">
+        <label>Last Name</label>
+        <input type="text" name="lastName" placeholder="Iyer" required>
+      </div>
+    </div>
+
+    <div class="f-group">
+      <label>Email Address</label>
+      <input type="email" name="email" placeholder="ananya@example.com" required>
+    </div>
+
+    <div class="f-group">
+      <label>Phone Number</label>
+      <input type="tel" name="phone" placeholder="+91 98765 43210">
+    </div>
+
+    <div class="f-group">
+      <label>Will you be attending?</label>
+      <div class="toggle-row">
+        <input type="radio" name="att" id="a-yes" value="yes" checked>
+        <label for="a-yes">Joyfully Accept</label>
+        <input type="radio" name="att" id="a-no" value="no">
+        <label for="a-no">Regretfully Decline</label>
+      </div>
+    </div>
+
+    <div class="f-group">
+      <label>Number of Guests</label>
+      <select name="guests">
+        <option value="">Please select</option>
+        <option>1</option><option>2</option><option>3</option><option>4</option>
+        <option>5</option><option>6</option><option>7</option><option>8</option>
+        <option>9</option><option>10</option><option>11</option><option>12</option>
+        <option>13</option><option>14</option><option>15</option><option>16+</option>
+      </select>
+    </div>
+
+    <div class="f-group">
+      <label>Which events will you attend?</label>
+      <div class="check-block">
+        <label><input type="checkbox" name="ev_sangeet" value="yes" checked> Sangeet &mdash; 29 August, 7:00 PM</label>
+        <label><input type="checkbox" name="ev_muhurtam" value="yes" checked> Muhurtam &mdash; 30 August, 11:00 AM</label>
+      </div>
+    </div>
+
+    <div class="f-group">
+      <label>A message for the couple</label>
+      <textarea name="message" placeholder="Share your heartfelt wishes…"></textarea>
+    </div>
+
+    <div class="submit-row">
+      <button type="submit" class="sub-btn" id="submitBtn">Send RSVP</button>
+      <button type="button" class="cal-btn" onclick="window.location.href='calendar.ics'">Add to Calendar</button>
+    </div>
+
+  </form>
+
+  <!-- Success -->
+  <div class="success-box" id="rsvpSuccess">
+    <svg width="44" height="44" viewBox="0 0 48 48" fill="none" style="margin:0 auto 0.6rem;display:block;">
+      <circle cx="24" cy="24" r="22" fill="none" stroke="#b8862a" stroke-width="1"/>
+      <path d="M12 24 L20 32 L36 16" stroke="#b8862a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <h3>Thank you</h3>
+    <p>Your RSVP has been received.<br>We look forward to celebrating with you.</p>
+    <p class="sig">&mdash; Shreya &amp; Aditya</p>
+  </div>
+
+  <!-- Fallback -->
+  <div class="success-box" id="rsvpFallback" style="display:none;">
+    <svg width="44" height="44" viewBox="0 0 48 48" fill="none" style="margin:0 auto 0.6rem;display:block;">
+      <circle cx="24" cy="24" r="22" fill="none" stroke="#b8862a" stroke-width="1"/>
+      <path d="M24 14 L24 26" stroke="#b8862a" stroke-width="1.6" stroke-linecap="round"/>
+      <circle cx="24" cy="32" r="1.5" fill="#b8862a"/>
+    </svg>
+    <h3 style="font-size:1.5rem;">Something went wrong</h3>
+    <p>Our form couldn't submit right now. Please email your RSVP instead.</p>
+    <button class="sub-btn fallback-send" style="margin-top:1rem;">Send via Email</button>
+  </div>
+
+</div>
+
+<script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzwiGLO7m3Ooxdc5lCPFankcbPZoCTUxLxhC7H0UvkCd7Jjev3j-ljXnXZJV73TzlNtog/exec';
+const FALLBACK_EMAIL = 'adityaramakrishnan11@gmail.com';
+
+function openMailtoFallback(data) {
+  const events = [
+    data.sangeet  === 'Yes' ? 'Sangeet'  : null,
+    data.muhurtam === 'Yes' ? 'Muhurtam' : null,
+  ].filter(Boolean).join(', ') || 'None';
+
+  const body = [
+    `Name: ${data.firstName} ${data.lastName}`,
+    `Email: ${data.email}`,
+    `Phone: ${data.phone}`,
+    `Attending: ${data.attending}`,
+    `Guests: ${data.guests}`,
+    `Events: ${events}`,
+    `Message: ${data.message || '—'}`,
+    `Submitted: ${data.submittedAt}`,
+  ].join('\n');
+
+  window.location.href =
+    `mailto:${FALLBACK_EMAIL}`
+    + `?subject=${encodeURIComponent('RSVP — Shreya & Aditya')}`
+    + `&body=${encodeURIComponent(body)}`;
+}
+
+document.getElementById('rsvpForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const btn = document.getElementById('submitBtn');
+  btn.textContent = 'Sending…';
+  btn.disabled = true;
+
+  const form = e.target;
+  const data = {
+    firstName:   form.firstName.value.trim(),
+    lastName:    form.lastName.value.trim(),
+    email:       form.email.value.trim(),
+    phone:       form.phone.value.trim(),
+    attending:   form.querySelector('input[name="att"]:checked').value,
+    guests:      form.guests.value,
+    sangeet:     form.ev_sangeet.checked  ? 'Yes' : 'No',
+    muhurtam:    form.ev_muhurtam.checked ? 'Yes' : 'No',
+    message:     form.message.value.trim(),
+    submittedAt: new Date().toLocaleString('en-IN', {timeZone:'Asia/Kolkata'}),
+  };
+
+  try {
+    const response = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(data),
+    });
+    const result = await response.json();
+    if (result.result !== 'ok') throw new Error('error');
+
+    form.style.display = 'none';
+    const s = document.getElementById('rsvpSuccess');
+    s.style.display = 'block';
+
+  } catch (err) {
+    btn.textContent = 'Send RSVP';
+    btn.disabled = false;
+
+    const fb = document.getElementById('rsvpFallback');
+    fb.style.display = 'block';
+    fb.querySelector('.fallback-send').onclick = () => openMailtoFallback(data);
+  }
+});
+</script>
+</body>
+</html>
