@@ -27,7 +27,7 @@ html,body{
   overflow:hidden;
 }
 
-/* ── BACKGROUND — same pattern as index.html ── */
+/* ── BACKGROUND — swap image based on orientation ── */
 body::after{
   content:'';
   position:fixed;
@@ -36,31 +36,21 @@ body::after{
   background-repeat:no-repeat;
   background-position:center center;
   background-size:cover;
+  /* Default: landscape — use 16×9 image */
   background-image:url("images/BG-2_16x9.png");
 }
-/* @media (max-aspect-ratio:1.45/1) and (min-aspect-ratio:1.15/1){
-  body::after{background-image:url("images/bg-4x3.webp");}
-}
-  
-@media (max-aspect-ratio:1.15/1) and (min-aspect-ratio:0.85/1){
-  body::after{background-image:url("images/bg-1x1.webp");}
-}
-@media (max-aspect-ratio:0.85/1) and (min-aspect-ratio:0.62/1){
-  body::after{background-image:url("images/bg-3x4.webp");}
-}*/
-@media (max-aspect-ratio:2/1) and (min-aspect-ratio:1.9/1){
+/* Portrait: any screen taller than it is wide → use 9×16 image */
+@media (orientation:portrait){
   body::after{background-image:url("images/BG-2_16x9.png");}
 }
-@media (max-aspect-ratio:0.62/1) and (min-aspect-ratio:0.50/1){
-  body::after{background-image:url("images/BG-2.png");}
+/* Preload both so the swap is instant */
+body::before{
+  content:'';
+  position:fixed;
+  width:1px;height:1px;
+  opacity:0;pointer-events:none;
+  background-image:url("images/BG-2.png"),url("images/BG-2.png");
 }
-/* 
-@media (max-aspect-ratio:0.50/1) and (min-aspect-ratio:0.44/1){
-  body::after{background-image:url("images/bg-9x19.webp");}
-}
-@media (max-aspect-ratio:0.44/1){
-  body::after{background-image:url("images/bg-9x21.webp");}
-} */
 
 /* ── OUTER WRAPPER — fills viewport, centres the card ── */
 .page{
@@ -261,6 +251,36 @@ body::after{
   color:var(--gold);font-size:1.1rem;margin-top:0.8rem;display:block;
 }
 
+/* ── VENUE FOOTER ── */
+.venue-footer{
+  display:flex;align-items:center;justify-content:center;gap:0.55rem;
+  margin-top:clamp(0.9rem,2vh,1.4rem);
+  padding-top:clamp(0.7rem,1.5vh,1rem);
+  border-top:1px solid rgba(184,134,42,0.18);
+}
+.venue-label{
+  font-family:'Cormorant SC',serif;font-weight:300;
+  font-size:0.56rem;letter-spacing:0.28em;color:var(--txt-lt);
+}
+.venue-link{
+  display:inline-flex;align-items:center;gap:0.38rem;
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(0.82rem,1.3vw,0.95rem);color:var(--brown-mid);
+  text-decoration:none;border-bottom:1px solid rgba(184,134,42,0.3);
+  padding-bottom:1px;transition:color 0.2s,border-color 0.2s;
+}
+.venue-link:hover{color:var(--gold);border-color:var(--gold);}
+.venue-link svg{flex-shrink:0;opacity:0.65;transition:opacity 0.2s;}
+.venue-link:hover svg{opacity:1;}
+
+/* ── DEBUG OVERLAY ── */
+#dbg{
+  position:fixed;bottom:8px;right:8px;z-index:9999;
+  background:rgba(0,0,0,0.65);color:#fff;
+  font:11px/1.5 monospace;padding:4px 8px;border-radius:4px;
+  pointer-events:none;display:none;
+}
+
 /* ── RESPONSIVE ── */
 @media(max-width:600px){
   .form-grid{grid-template-columns:1fr;}
@@ -284,7 +304,7 @@ body::after{
       <div class="header">
         <span class="lbl">Kindly RSVP</span>
         <p class="names">Shreya <em>&amp;</em> Aditya</p>
-        <p class="sub">The Peacock Grove, Bengaluru &nbsp;&middot;&nbsp; 30 August 2026</p>
+        <p class="sub">The Peacock Grove, Bengaluru &nbsp;&middot;&nbsp; 29–30 August 2026</p>
       </div>
 
       <div class="divr"><span class="divr-gem"></span></div>
@@ -340,7 +360,7 @@ body::after{
           <div class="f-group span-2">
             <label>Which events will you attend?</label>
             <div class="check-block">
-              <label><input type="checkbox" name="ev_oonjal" value="yes" unchecked> Oonjal &mdash; 30 August, 8:00 AM</label>
+              <label><input type="checkbox" name="ev_sangeet" value="yes" unchecked> Sangeet &mdash; 29 August, 7:00 PM</label>
               <label><input type="checkbox" name="ev_muhurtham" value="yes" unchecked> Muhurtham &mdash; 30 August, 11:00 AM</label>
             </div>
           </div>
@@ -382,9 +402,27 @@ body::after{
         <button class="sub-btn fallback-send" style="margin-top:1rem;">Send via Email</button>
       </div>
 
+      <!-- Venue / Directions -->
+      <div class="venue-footer">
+        <span class="venue-label">Venue</span>
+        <a class="venue-link"
+           href="https://maps.google.com/?q=Peacock+Grove+Bengaluru"
+           target="_blank" rel="noopener">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+            <circle cx="12" cy="9" r="2.5"/>
+          </svg>
+          The Peacock Grove, Bengaluru
+        </a>
+      </div>
+
     </div><!-- /card-inner -->
   </div><!-- /card -->
 </div><!-- /page -->
+
+<!-- Debug overlay — press D to toggle -->
+<div id="dbg"></div>
 
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzwiGLO7m3Ooxdc5lCPFankcbPZoCTUxLxhC7H0UvkCd7Jjev3j-ljXnXZJV73TzlNtog/exec';
@@ -392,7 +430,7 @@ const FALLBACK_EMAIL = 'adityaramakrishnan11@gmail.com';
 
 function openMailtoFallback(data) {
   const events = [
-    data.oonjal  === 'Yes' ? 'Oonjal'  : null,
+    data.sangeet  === 'Yes' ? 'Sangeet'  : null,
     data.muhurtham === 'Yes' ? 'Muhurtham' : null,
   ].filter(Boolean).join(', ') || 'None';
 
@@ -428,7 +466,7 @@ document.getElementById('rsvpForm').addEventListener('submit', async function(e)
     phone:       form.phone.value.trim(),
     attending:   form.querySelector('input[name="att"]:checked').value,
     guests:      form.guests.value,
-    oonjal:     form.ev_oonjal.checked  ? 'Yes' : 'No',
+    sangeet:     form.ev_sangeet.checked  ? 'Yes' : 'No',
     muhurtham:    form.ev_muhurtham.checked ? 'Yes' : 'No',
     message:     form.message.value.trim(),
     submittedAt: new Date().toLocaleString('en-IN', {timeZone:'Asia/Kolkata'}),
@@ -454,6 +492,27 @@ document.getElementById('rsvpForm').addEventListener('submit', async function(e)
     fb.querySelector('.fallback-send').onclick = () => openMailtoFallback(data);
   }
 });
+</script>
+
+<script>
+/* ── Debug overlay: press D to toggle ── */
+const dbg = document.getElementById('dbg');
+let dbgOn = false;
+function updateDbg(){
+  const w = window.innerWidth, h = window.innerHeight;
+  const ratio = (w/h).toFixed(3);
+  const orient = w > h ? 'landscape' : 'portrait';
+  const img = w > h ? 'alt-16x9-2.png' : 'alt-9x16.png';
+  dbg.textContent = `${w}×${h}  ratio:${ratio}  ${orient}\nloading: ${img}`;
+}
+document.addEventListener('keydown', e => {
+  if(e.key.toLowerCase() === 'd'){
+    dbgOn = !dbgOn;
+    dbg.style.display = dbgOn ? 'block' : 'none';
+    if(dbgOn) updateDbg();
+  }
+});
+window.addEventListener('resize', ()=>{ if(dbgOn) updateDbg(); });
 </script>
 </body>
 </html>

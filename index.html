@@ -653,12 +653,12 @@ footer .panel{
 
   </div>
 
-    <!-- MUHURTAM -->
+    <!-- Muhurtham -->
     <div class="ev-card">
       <div style="display:flex;justify-content:center;margin-bottom:1.35rem;">
-        <img src="images/muhurtam.webp" alt="Muhurtam" style="width:72px;height:72px;object-fit:cover;border-radius:50%;border:1px solid rgba(184,134,42,0.3);">
+        <img src="images/muhurtham.webp" alt="Muhurtham" style="width:72px;height:72px;object-fit:cover;border-radius:50%;border:1px solid rgba(184,134,42,0.3);">
       </div>
-      <p class="ev-name">Muhurtam</p>
+      <p class="ev-name">Muhurtham</p>
       <p class="ev-date">30 August</p>
       <p class="ev-time">11:00 AM</p>
       <div class="ev-hr"></div>
@@ -754,7 +754,7 @@ footer .panel{
         <label>Which events will you attend?</label>
         <div class="check-block">
           <label><input type="checkbox" name="ev_sangeet" value="yes" checked> Sangeet &mdash; 29 August, 7:00 PM</label>
-          <label><input type="checkbox" name="ev_muhurtam" value="yes" checked> Muhurtam &mdash; 30 August, 11:00 AM</label>
+          <label><input type="checkbox" name="ev_muhurtham" value="yes" checked> Muhurtham &mdash; 30 August, 11:00 AM</label>
         </div>
       </div>
       <div class="f-group">
@@ -904,7 +904,7 @@ const FALLBACK_EMAIL = 'adityaramakrishnan11@gmail.com';
 function openMailtoFallback(data) {
   const events = [
     data.sangeet    === 'Yes' ? 'Sangeet' : null,
-    data.muhurtam   === 'Yes' ? 'Muhurtam' : null,
+    data.muhurtham   === 'Yes' ? 'Muhurtham' : null,
   ].filter(Boolean).join(', ') || 'None';
 
   const body = [
@@ -939,7 +939,7 @@ document.getElementById('rsvpForm').addEventListener('submit', async function(e)
     attending:   form.querySelector('input[name="att"]:checked').value,
     guests:      form.querySelector('select').value,
     sangeet:     form.querySelector('input[name="ev_sangeet"]').checked  ? 'Yes' : 'No',
-    muhurtam:    form.querySelector('input[name="ev_muhurtam"]').checked ? 'Yes' : 'No',
+    muhurtham:    form.querySelector('input[name="ev_muhurtham"]').checked ? 'Yes' : 'No',
     message:     form.querySelector('textarea').value,
     submittedAt: new Date().toLocaleString('en-IN', {timeZone:'Asia/Kolkata'})
   };
