@@ -178,16 +178,6 @@ nav button:hover, nav button.active { color: var(--nav-active); }
 
 
 
-
-/* ── DEBUG OVERLAY ── */
-#dbg{
-  position:fixed;bottom:8px;right:8px;z-index:9999;
-  background:rgba(0,0,0,0.65);color:#fff;
-  font:11px/1.5 monospace;padding:4px 8px;border-radius:4px;
-  pointer-events:none;display:none;
-}
-
-
 /* ═══════════════════════════════════════════
    SECTIONS & PANELS
 ═══════════════════════════════════════════ */
@@ -862,9 +852,6 @@ footer .panel {
 </div>
 </footer>
 
-<!-- Debug overlay — press D to toggle -->
-<div id="dbg"></div>
-
 <!-- Fixed nav -->
 <nav>
   <button onclick="goTo('pg-home')">Home</button>
@@ -976,28 +963,5 @@ document.getElementById('rsvpForm').addEventListener('submit', async function(e)
   }
 });
 </script>
-
-
-<script>
-/* ── Debug overlay: press D to toggle ── */
-const dbg = document.getElementById('dbg');
-let dbgOn = false;
-function updateDbg(){
-  const w = window.innerWidth, h = window.innerHeight;
-  const ratio = (w/h).toFixed(3);
-  const orient = w > h ? 'landscape' : 'portrait';
-  const img = w > h ? 'BG-2_16x9.png' : 'BG-2_9x16.png';
-  dbg.textContent = `${w}×${h}  ratio:${ratio}  ${orient}\nloading: ${img}`;
-}
-document.addEventListener('keydown', e => {
-  if(e.key.toLowerCase() === 'd'){
-    dbgOn = !dbgOn;
-    dbg.style.display = dbgOn ? 'block' : 'none';
-    if(dbgOn) updateDbg();
-  }
-});
-window.addEventListener('resize', ()=>{ if(dbgOn) updateDbg(); });
-</script>
-
 </body>
 </html>
