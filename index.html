@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-palette="midnight-copper">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,96 +8,9 @@
 <style>
 
 /* ═══════════════════════════════════════════
-   PALETTE SYSTEM — change data-palette on <html>
-   to switch the entire site's colour story
+   COLOUR SCHEME — Midnight & Copper
+   Controlled via the data-palette attribute on <html>.
 ═══════════════════════════════════════════ */
-
-/*
-  Available palettes:
-  forest-turmeric   (default — deep green + turmeric gold)
-  inkwell-marigold  (letterpress dark + warm marigold)
-  vermillion-champagne (festive South Indian energy)
-  midnight-copper   (dramatic starlit)
-  terracotta-ivory  (warm clay, handmade feel)
-*/
-
-/* ── Forest & Turmeric (default) ── */
-html[data-palette="forest-turmeric"] {
-  --bg:          #1a2e1e;          /* deep forest */
-  --bg2:         #22391f;
-  --panel-bg:    rgba(240,235,215,0.91);
-  --panel-bdr:   rgba(192,158,60,0.28);
-  --cream:       #f0ead6;
-  --parch:       rgba(240,235,215,0.91);
-  --parch-strong:rgba(240,235,215,0.96);
-  --gold:        #c8a040;
-  --gold-lt:     #d9b85a;
-  --accent:      #2e5c2a;          /* forest green accent */
-  --brown:       #1f3319;
-  --brown-mid:   #3d5c35;
-  --txt:         #1f2e1a;
-  --txt-mid:     #4a6040;
-  --txt-lt:      #7a8f72;
-  --nav-bg:      rgba(26,46,30,0.92);
-  --nav-txt:     rgba(240,235,215,0.8);
-  --nav-active:  #c8a040;
-  --hero-glow:   rgba(26,46,30,0.5);
-  --hero-txt:    #f0ead6;
-  --hero-mid:    rgba(200,180,120,0.85);
-  --palette-label: "Forest & Turmeric";
-}
-
-/* ── Inkwell & Marigold ── */
-html[data-palette="inkwell-marigold"] {
-  --bg:          #1a1410;
-  --bg2:         #231c16;
-  --panel-bg:    rgba(245,240,228,0.93);
-  --panel-bdr:   rgba(210,140,30,0.3);
-  --cream:       #f5f0e4;
-  --parch:       rgba(245,240,228,0.93);
-  --parch-strong:rgba(245,240,228,0.97);
-  --gold:        #d4880a;
-  --gold-lt:     #e8a830;
-  --accent:      #4a2e08;
-  --brown:       #1a1008;
-  --brown-mid:   #6b3e10;
-  --txt:         #1a1008;
-  --txt-mid:     #5c3a14;
-  --txt-lt:      #8a6030;
-  --nav-bg:      rgba(26,20,16,0.93);
-  --nav-txt:     rgba(245,240,228,0.82);
-  --nav-active:  #d4880a;
-  --hero-glow:   rgba(26,20,16,0.5);
-  --hero-txt:    #f5f0e4;
-  --hero-mid:    rgba(212,136,10,0.9);
-  --palette-label: "Inkwell & Marigold";
-}
-
-/* ── Vermillion & Champagne ── */
-html[data-palette="vermillion-champagne"] {
-  --bg:          #6b1a10;
-  --bg2:         #7e2218;
-  --panel-bg:    rgba(252,246,232,0.92);
-  --panel-bdr:   rgba(200,170,100,0.3);
-  --cream:       #fcf6e8;
-  --parch:       rgba(252,246,232,0.92);
-  --parch-strong:rgba(252,246,232,0.96);
-  --gold:        #b89040;
-  --gold-lt:     #cca850;
-  --accent:      #8c2218;
-  --brown:       #3a0c06;
-  --brown-mid:   #7a2c20;
-  --txt:         #3a0c06;
-  --txt-mid:     #6a3020;
-  --txt-lt:      #9a6040;
-  --nav-bg:      rgba(107,26,16,0.94);
-  --nav-txt:     rgba(252,246,232,0.85);
-  --nav-active:  #f0c060;
-  --hero-glow:   rgba(107,26,16,0.55);
-  --hero-txt:    #fcf6e8;
-  --hero-mid:    rgba(240,200,100,0.9);
-  --palette-label: "Vermillion & Champagne";
-}
 
 /* ── Midnight & Copper ── */
 :root,
@@ -124,32 +37,6 @@ html[data-palette="midnight-copper"] {
   --hero-txt:    #eee8dc;
   --hero-mid:    rgba(184,112,64,0.9);
   --palette-label: "Midnight & Copper";
-}
-
-/* ── Terracotta & Ivory ── */
-html[data-palette="terracotta-ivory"] {
-  --bg:          #7a3820;
-  --bg2:         #8c4428;
-  --panel-bg:    rgba(252,248,240,0.92);
-  --panel-bdr:   rgba(180,130,80,0.28);
-  --cream:       #fcf8f0;
-  --parch:       rgba(252,248,240,0.92);
-  --parch-strong:rgba(252,248,240,0.96);
-  --gold:        #a07040;
-  --gold-lt:     #b88850;
-  --accent:      #8c3820;
-  --brown:       #3a1a08;
-  --brown-mid:   #6a3820;
-  --txt:         #3a1a08;
-  --txt-mid:     #6a4020;
-  --txt-lt:      #9a7050;
-  --nav-bg:      rgba(122,56,32,0.93);
-  --nav-txt:     rgba(252,248,240,0.85);
-  --nav-active:  #e8c080;
-  --hero-glow:   rgba(122,56,32,0.55);
-  --hero-txt:    #fcf8f0;
-  --hero-mid:    rgba(200,160,100,0.9);
-  --palette-label: "Terracotta & Ivory";
 }
 
 /* ═══════════════════════════════════════════
@@ -218,74 +105,6 @@ nav button {
   transition: color 0.22s; padding: 0;
 }
 nav button:hover, nav button.active { color: var(--nav-active); }
-
-/* ═══════════════════════════════════════════
-   PALETTE SWITCHER
-═══════════════════════════════════════════ */
-.palette-trigger {
-  position: fixed;
-  bottom: 1.5rem;
-  right: 1.5rem;
-  z-index: 800;
-  width: 44px; height: 44px;
-  border-radius: 50%;
-  background: var(--nav-bg);
-  border: 1px solid var(--panel-bdr);
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  backdrop-filter: blur(12px);
-  transition: transform 0.25s, background 0.4s;
-  color: var(--nav-txt);
-  font-size: 1.1rem;
-}
-.palette-trigger:hover { transform: scale(1.1) rotate(20deg); }
-
-.palette-drawer {
-  position: fixed;
-  bottom: 5rem;
-  right: 1.5rem;
-  z-index: 799;
-  background: var(--nav-bg);
-  backdrop-filter: blur(18px);
-  border: 1px solid var(--panel-bdr);
-  padding: 1.2rem;
-  width: 240px;
-  display: none;
-  flex-direction: column;
-  gap: 0.65rem;
-}
-.palette-drawer.open { display: flex; }
-
-.palette-option {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  cursor: pointer;
-  padding: 0.55rem 0.6rem;
-  border: 1px solid transparent;
-  transition: border-color 0.2s, background 0.2s;
-  border-radius: 2px;
-}
-.palette-option:hover { border-color: var(--panel-bdr); background: rgba(255,255,255,0.06); }
-.palette-option.active { border-color: var(--gold-lt); }
-.palette-swatch {
-  width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
-  border: 2px solid rgba(255,255,255,0.18);
-}
-.palette-name {
-  font-family: 'Jost', sans-serif;
-  font-size: 0.7rem;
-  letter-spacing: 0.06em;
-  color: var(--nav-txt);
-  line-height: 1.3;
-}
-.palette-sub {
-  font-family: 'Cormorant Garamond', serif;
-  font-style: italic;
-  font-size: 0.78rem;
-  color: rgba(255,255,255,0.4);
-  line-height: 1;
-}
 
 /* ═══════════════════════════════════════════
    HERO
@@ -795,7 +614,7 @@ footer .panel {
       <!-- Kaasi Yatrai -->
       <div class="ev-row img-left">
         <div class="ev-art">
-          <img src="images/art-kaasi.png" alt="Kashi Yatra">
+          <img src="images/art_kaasi.png" alt="Kashi Yatra">
         </div>
         <div class="ev-text">
           <p class="ev-title-large">Kaasi Yatrai</p>
@@ -810,7 +629,7 @@ footer .panel {
       <!-- Maalai -->
       <div class="ev-row img-right">
         <div class="ev-art">
-          <img src="images/art-maalai.png" alt="Maalai">
+          <img src="images/art_maalai.png" alt="Maalai">
         </div>
         <div class="ev-text">
           <p class="ev-title-large">Maalai Maatral</p>
@@ -825,7 +644,7 @@ footer .panel {
       <!-- Oonjal -->
       <div class="ev-row img-left">
         <div class="ev-art">
-          <img src="images/art-oonjal.png" alt="Oonjal">
+          <img src="images/art_oonjal.png" alt="Oonjal">
         </div>
         <div class="ev-text">
           <p class="ev-title-large">Oonjal</p>
@@ -849,14 +668,14 @@ footer .panel {
           </p>
         </div>
         <div class="ev-art">
-          <img src="images/art-muhurtham.png" alt="Muhurtham">
+          <img src="images/art_muhurtham.png" alt="Muhurtham">
         </div>
       </div>
 
       <!-- Lunch -->
       <div class="ev-row img-left">
         <div class="ev-art">
-          <img src="images/art-sangeet.png" alt="Lunch & Farewells">
+          <img src="images/art_lunch.png" alt="Lunch & Farewells">
         </div>
         <div class="ev-text">
           <p class="ev-name">Post-ceremony</p>
@@ -1043,48 +862,6 @@ footer .panel {
 </div>
 </footer>
 
-<!-- ══════════════ PALETTE SWITCHER UI ══════════════ -->
-<button class="palette-trigger" id="paletteTrigger" title="Switch colour palette" aria-label="Switch palette">
-  ◐
-</button>
-<div class="palette-drawer" id="paletteDrawer">
-  <div class="palette-option active" data-palette="forest-turmeric">
-    <div class="palette-swatch" style="background:linear-gradient(135deg,#1a2e1e 50%,#c8a040 50%);"></div>
-    <div>
-      <div class="palette-name">Forest &amp; Turmeric</div>
-      <!-- <div class="palette-sub">earthy, lush, unexpected</div> -->
-    </div>
-  </div>
-  <div class="palette-option" data-palette="inkwell-marigold">
-    <div class="palette-swatch" style="background:linear-gradient(135deg,#1a1410 50%,#d4880a 50%);"></div>
-    <div>
-      <div class="palette-name">Inkwell &amp; Marigold</div>
-      <!-- <div class="palette-sub">bold, letterpress, graphic</div> -->
-    </div>
-  </div>
-  <div class="palette-option" data-palette="vermillion-champagne">
-    <div class="palette-swatch" style="background:linear-gradient(135deg,#6b1a10 50%,#b89040 50%);"></div>
-    <div>
-      <div class="palette-name">Vermillion &amp; Champagne</div>
-      <!-- <div class="palette-sub">festive, rich, South Indian</div> -->
-    </div>
-  </div>
-  <div class="palette-option" data-palette="midnight-copper">
-    <div class="palette-swatch" style="background:linear-gradient(135deg,#0d1220 50%,#b87040 50%);"></div>
-    <div>
-      <div class="palette-name">Midnight &amp; Copper</div>
-      <!-- <div class="palette-sub">dramatic, starlit, Sangeet</div> -->
-    </div>
-  </div>
-  <div class="palette-option" data-palette="terracotta-ivory">
-    <div class="palette-swatch" style="background:linear-gradient(135deg,#7a3820 50%,#fcf8f0 50%);"></div>
-    <div>
-      <div class="palette-name">Terracotta &amp; Ivory</div>
-      <!-- <div class="palette-sub">warm clay, handmade feel</div> -->
-    </div>
-  </div>
-</div>
-
 <!-- Debug overlay — press D to toggle -->
 <div id="dbg"></div>
 
@@ -1128,41 +905,6 @@ sections.forEach(id => {
   const el = document.getElementById(id);
   if (el) activeIO.observe(el);
 });
-
-/* ── Palette switcher ── */
-const trigger = document.getElementById('paletteTrigger');
-const drawer = document.getElementById('paletteDrawer');
-const options = document.querySelectorAll('.palette-option');
-const htmlEl = document.documentElement;
-
-// Load saved palette
-const saved = localStorage.getItem('sa-palette') || 'midnight-copper';
-setPalette(saved);
-
-trigger.addEventListener('click', () => {
-  drawer.classList.toggle('open');
-});
-
-document.addEventListener('click', e => {
-  if (!trigger.contains(e.target) && !drawer.contains(e.target)) {
-    drawer.classList.remove('open');
-  }
-});
-
-options.forEach(opt => {
-  opt.addEventListener('click', () => {
-    setPalette(opt.dataset.palette);
-    drawer.classList.remove('open');
-  });
-});
-
-function setPalette(name) {
-  htmlEl.setAttribute('data-palette', name);
-  localStorage.setItem('sa-palette', name);
-  options.forEach(o => {
-    o.classList.toggle('active', o.dataset.palette === name);
-  });
-}
 
 /* ── RSVP ── */
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzwiGLO7m3Ooxdc5lCPFankcbPZoCTUxLxhC7H0UvkCd7Jjev3j-ljXnXZJV73TzlNtog/exec';
