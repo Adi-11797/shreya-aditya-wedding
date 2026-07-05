@@ -22,6 +22,7 @@
 */
 
 /* ── Forest & Turmeric (default) ── */
+:root,
 html[data-palette="forest-turmeric"] {
   --bg:          #1a2e1e;          /* deep forest */
   --bg2:         #22391f;
@@ -100,7 +101,6 @@ html[data-palette="vermillion-champagne"] {
 }
 
 /* ── Midnight & Copper ── */
-:root,
 html[data-palette="midnight-copper"] {
   --bg:          #0d1220;
   --bg2:         #141a2e;
@@ -176,7 +176,7 @@ body::after {
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
-  background-image: url("images/BG-2_16x9.png");
+  background-image: url("images/BG-2_4x3.png");
 }
 @media (max-aspect-ratio: 1.948/1) and (min-aspect-ratio: 1.9/1) { body::after { background-image: url("images/BG-2_1.948.png"); } }
 @media (max-aspect-ratio: 1.45/1) and (min-aspect-ratio: 1.15/1) { body::after { background-image: url("images/BG-2_4x3.png"); } }
@@ -349,12 +349,12 @@ nav button:hover, nav button.active { color: var(--nav-active); }
 .wg-item { text-align: center; }
 .wg-day {
   font-family: 'Cormorant SC', serif; font-size: 0.6rem;
-  letter-spacing: 0.22em; color: var(--bg);
+  letter-spacing: 0.22em; color: var(--txt-lt);
 }
 .wg-title {
   font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--txt); /*#fff;*/
 }
-.wg-time { font-size: 0.72rem; color: var(--bg2); /*rgba(255,255,255,0.5);*/ }
+.wg-time { font-size: 0.72rem; color: var(--txt-lt); /*rgba(255,255,255,0.5);*/ }
 .wg-divider { width: 1px; height: 50px; background: rgba(255,255,255,0.15); }
 
 
@@ -525,7 +525,7 @@ nav button:hover, nav button.active { color: var(--nav-active); }
 
 .ev-art {
   position: relative;
-  aspect-ratio: 5 / 5;
+  aspect-ratio: 4 / 5;
   border: 1px solid var(--panel-bdr);
   background: linear-gradient(160deg, rgba(255,255,255,0.25), rgba(255,255,255,0.05));
   overflow: hidden;
@@ -744,7 +744,7 @@ footer .panel {
       Aditya
     </h1>
     <div class="divr" style="--panel-bdr:rgba(255,255,255,0.2);"><span class="divr-gem" ;opacity:0.5;"></span></div>
-    <p class="hero-date">30 August 2026</p>
+    <p class="hero-date">29 &amp; 30 August 2026</p>
     <p class="hero-venue">The Peacock Grove, Bangalore</p>
     <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;">
       <button class="btn btn-solid" onclick="goTo('pg-invite')">Invitation</button>
@@ -753,8 +753,69 @@ footer .panel {
   </div>
 </section>
 
+<!-- ══════════════ WEEKEND AT A GLANCE ══════════════ -->
+<div class="weekend-glance">
+  <div class="wg-item">
+    <div class="wg-day">Saturday</div>
+    <div class="wg-title">Sangeet</div>
+    <div class="wg-time">29 August · 8:00 PM</div>
+  </div>
+  <div class="wg-divider"></div>
+  <div class="wg-item">
+    <div class="wg-day">Sunday</div>
+    <div class="wg-title">Muhurtham</div>
+    <div class="wg-time">30 August · 11:00 AM</div>
+  </div>
+</div>
 
+<!-- ══════════════ INVITE ══════════════ -->
+<div class="section" id="pg-invite">
+<div class="panel">
+<div style="text-align:center;margin-bottom:2.5rem;">
+  <img
+    src="images/ganesha-2.png"
+    alt="Lord Ganesha"
+    style="width:160px;max-width:55%;height:auto;display:block;margin:0 auto;"
+  >
+  <p class="lbl" style="margin-top:1rem;">Shri Ganeshaya Namaha</p>
+</div>
 
+<div class="divr"><span class="divr-gem"></span></div>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2rem;margin:2.5rem 0;text-align:center;">
+  <div>
+    <p class="lbl" style="margin-bottom:1rem;">Bride's Family</p>
+    <p style="font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--txt-mid);margin-bottom:0.8rem;">Daughter of</p>
+    <div style="font-family:'Cormorant Garamond',serif;color:var(--brown);line-height:1.4;">
+      <span style="font-size:0.9rem;color:var(--txt-mid);">Smt.</span>
+      <span style="font-size:1.4rem;"> Srilakshmi</span>
+      <div style="font-size:1rem;color:var(--gold);margin:0.25rem 0;">&amp;</div>
+      <span style="font-size:0.9rem;color:var(--txt-mid);">Sri</span>
+      <span style="font-size:1.4rem;"> Yajnakumara Kulamarva</span>
+    </div>
+  </div>
+  <div>
+    <p class="lbl" style="margin-bottom:1rem;">Groom's Family</p>
+    <p style="font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--txt-mid);margin-bottom:0.8rem;">Son of</p>
+    <div style="font-family:'Cormorant Garamond',serif;color:var(--brown);line-height:1.4;">
+      <span style="font-size:0.9rem;color:var(--txt-mid);">Smt.</span>
+      <span style="font-size:1.4rem;"> Usha Ramakrishnan</span>
+      <div style="font-size:1rem;color:var(--gold);margin:0.25rem 0;">&amp;</div>
+      <span style="font-size:0.9rem;color:var(--txt-mid);">Sri</span>
+      <span style="font-size:1.4rem;"> Ramakrishnan Subramaniam</span>
+    </div>
+  </div>
+</div>
+
+<div class="divr"><span class="divr-gem"></span></div>
+
+<p class="cordial" style="margin-top:1.8rem;">
+  joyfully invite you — their friends and family <br>
+</p>
+
+<div style="margin:2rem 0 1.5rem;text-align:center;">
+  <img src="images/sacred-lamp.png" alt="Sacred Lamp" style="width:180px;height:auto;display:block;margin:0 auto;">
+</div>
 <!-- 
 <div class="names-big" style="margin:1.5rem 0 0.5rem;">
   Shreya
@@ -762,9 +823,9 @@ footer .panel {
   Aditya
 </div> -->
 
-<!-- <p style="font-family:'Cormorant SC',serif;font-weight:300;font-size:0.7rem;letter-spacing:0.35em;text-align:center;color:var(--txt-lt);margin-top:1.2rem;">
-  30 August 2026 &nbsp;&middot;&nbsp; The Peacock Grove, Bangalore
-</p> -->
+<p style="font-family:'Cormorant SC',serif;font-weight:300;font-size:0.7rem;letter-spacing:0.35em;text-align:center;color:var(--txt-lt);margin-top:1.2rem;">
+  29 &middot; 30 August 2026 &nbsp;&middot;&nbsp; The Peacock Grove, Bangalore
+</p>
 
 <!-- Warm friend note -->
 <!-- <div style="margin-top:3rem;padding:1.8rem 2rem;border:1px solid var(--panel-bdr);background:rgba(255,255,255,0.3);text-align:center;">
@@ -782,17 +843,60 @@ footer .panel {
 <div class="panel" style="max-width:900px;">
 
   <!-- <span class="lbl">The Full Weekend</span> -->
-  <h2 class="hdg">30th <em>August</em></h2>
+  <h2 class="hdg">The Full <em>Weekend</em></h2>
   <!-- <p style="text-align:center;font-family:'Jost',sans-serif;font-weight:300;font-size:0.9rem;color:var(--txt-lt);margin-top:0.8rem;line-height:1.8;">
     A proper send-off for two people who've earned it.
   </p> -->
 
   <div class="events-journey">
 
+    <!-- ─── SATURDAY ─── -->
+    <div class="journey-day">
+      <div class="journey-day-label">
+        <span>Saturday</span>
+        <div class="day-date">29 August</div>
+      </div>
+
+      <!-- Nishchithartha -->
+      <div class="ev-row img-left">
+        <div class="ev-art">
+          <img src="images/art-nishchithartha.png" alt="Nishchithartha">
+        </div>
+        <div class="ev-text">
+          <p class="ev-title-large">Nishchithartha</p>
+          <p class="ev-time-line">6:00 PM</p>
+          <div class="ev-hr"></div>
+          <p class="ev-desc">
+            Our families gather to exchange blessings and announce the wedding.
+          </p>
+        </div>
+      </div>
+
+      <!-- Sangeet -->
+      <div class="ev-row img-right">
+        <div class="ev-text">
+          <p class="ev-title-large">Sangeet</p>
+          <p class="ev-time-line">8:00 PM onwards</p>
+          <div class="ev-hr"></div>
+          <p class="ev-desc">
+            An evening of music and dance as both families come together to celebrate.
+          </p>
+          <p class="ev-dress">Dress: Traditional Indian attire — bring the colour</p>
+        </div>
+        <div class="ev-art">
+          <img src="images/art-sangeet.png" alt="Sangeet">
+        </div>
+      </div>
+    </div>
+
     <!-- ─── SUNDAY ─── -->
     <div class="journey-day">
+      <div class="journey-day-label">
+        <span>Sunday</span>
+        <div class="day-date">30 August</div>
+      </div>
 
-      <!-- Kaasi Yatrai -->
+      <!-- Kashi Yatra -->
       <div class="ev-row img-left">
         <div class="ev-art">
           <img src="images/art-kaasi.png" alt="Kashi Yatra">
@@ -807,23 +911,8 @@ footer .panel {
         </div>
       </div>
 
-      <!-- Maalai -->
-      <div class="ev-row img-right">
-        <div class="ev-art">
-          <img src="images/art-maalai.png" alt="Maalai">
-        </div>
-        <div class="ev-text">
-          <p class="ev-title-large">Maalai Matral</p>
-          <p class="ev-time-line">7:30 AM</p>
-          <div class="ev-hr"></div>
-          <p class="ev-desc">
-            The couple is seated together on a flower-decked swing amid song and blessing.
-          </p>
-        </div>
-      </div>
-
       <!-- Oonjal -->
-      <div class="ev-row img-left">
+      <div class="ev-row img-right">
         <div class="ev-art">
           <img src="images/art-oonjal.png" alt="Oonjal">
         </div>
@@ -838,7 +927,7 @@ footer .panel {
       </div>
 
       <!-- Muhurtham -->
-      <div class="ev-row img-right">
+      <div class="ev-row img-left">
         <div class="ev-text">
           <p class="ev-name">The Ceremony</p>
           <p class="ev-title-large">Muhurtham</p>
@@ -854,14 +943,14 @@ footer .panel {
       </div>
 
       <!-- Lunch -->
-      <div class="ev-row img-left">
+      <div class="ev-row img-right">
         <div class="ev-art">
-          <img src="images/art-sangeet.png" alt="Lunch & Farewells">
+          <img src="images/art-lunch.png" alt="Lunch & Farewells">
         </div>
         <div class="ev-text">
           <p class="ev-name">Post-ceremony</p>
           <p class="ev-title-large">Lunch & Farewells</p>
-          <p class="ev-time-line">12:00 PM onwards</p>
+          <p class="ev-time-line">1:00 PM onwards</p>
           <div class="ev-hr"></div>
           <p class="ev-desc">
             A long, leisurely lunch with everyone you've met over the weekend.
@@ -877,33 +966,9 @@ footer .panel {
 </div>
 </div><!-- /section events -->
 
-
-
-<!-- ══════════════ WEEKEND AT A GLANCE ══════════════ -->
-<div class="weekend-glance">
-  <div class="wg-item">
-    <div class="wg-day">Dress Code</div>
-    <div class="wg-title">Traditional Indian Attire</div>
-    <div class="wg-time">Muhurtham</div>
-  </div>
-  <div class="wg-divider"></div>
-  <div class="wg-item">
-    <div class="wg-day">Parking</div>
-    <div class="wg-title">Available at Venue</div>
-    <div class="wg-time">Plenty of space</div>
-  </div>
-  <div class="wg-divider"></div>
-  <div class="wg-item">
-    <div class="wg-day">Questions</div>
-    <div class="wg-title">Just Text Us</div>
-    <div class="wg-time">Anytime</div>
-  </div>
-</div>
-
-
 <!-- Venue strip (outside main panel) -->
 <div class="venue-strip">
-  <img src="images/lotus.png" alt="Lotus" style="width:50px;display:block;margin:0 auto 0.8rem;">
+  <img src="images/feather.png" alt="Feather" style="width:50px;display:block;margin:0 auto 0.8rem;">
   <p class="lbl" style="margin-bottom:0.6rem;">Venue</p>
   <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:var(--txt-mid);">The Peacock Grove</p>
   <p style="font-family:'Jost',sans-serif;font-weight:300;font-size:0.77rem;color:var(--txt-lt);margin-top:0.5rem;letter-spacing:0.06em;">
@@ -927,7 +992,7 @@ footer .panel {
   </div>
 </div>
 
-<!-- FAQ strip
+<!-- FAQ strip -->
 <div class="faq-strip">
   <div class="faq-item-new">
     <p class="lbl">Dress Code</p>
@@ -944,7 +1009,7 @@ footer .panel {
     <p style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--brown);">Just Text Us</p>
     <p style="font-family:'Jost',sans-serif;font-size:0.78rem;color:var(--txt-lt);margin-top:0.3rem;">Anytime</p>
   </div>
-</div> -->
+</div>
 
 <!-- ══════════════ RSVP ══════════════ -->
 <div class="section" id="pg-rsvp">
@@ -985,7 +1050,7 @@ footer .panel {
       <div class="f-group">
         <label>Which events will you attend?</label>
         <div class="check-block">
-          <label><input type="checkbox" name="ev_oonjal" value="yes" unchecked> Oonjal &mdash; 30 August, 8:00 AM</label>
+          <label><input type="checkbox" name="ev_sangeet" value="yes" unchecked> Sangeet &mdash; 29 August, 7:30 PM</label>
           <label><input type="checkbox" name="ev_muhurtham" value="yes" unchecked> Muhurtham &mdash; 30 August, 11:00 AM</label>
         </div>
       </div>
@@ -1038,7 +1103,7 @@ footer .panel {
     </p>
   </div>
   <p class="footer-names">Shreya &amp; Aditya</p>
-  <p class="footer-date" style="margin-top:0.35rem;">30 August 2026 &nbsp;&middot;&nbsp; Bangalore</p>
+  <p class="footer-date" style="margin-top:0.35rem;">29 &middot; 30 August 2026 &nbsp;&middot;&nbsp; Bangalore</p>
   <div class="divr" style="max-width:160px;margin-top:1.3rem;margin-bottom:0.85rem;"><span class="divr-gem"></span></div>
 </div>
 </footer>
@@ -1170,7 +1235,7 @@ const FALLBACK_EMAIL = 'adityaramakrishnan11@gmail.com';
 
 function openMailtoFallback(data) {
   const events = [
-    data.oonjal  === 'Yes' ? 'Oonjal'            : null,
+    data.sangeet  === 'Yes' ? 'Sangeet'            : null,
     data.muhurtham === 'Yes' ? 'Muhurtham'           : null,
   ].filter(Boolean).join(', ') || 'None';
 
@@ -1204,7 +1269,7 @@ document.getElementById('rsvpForm').addEventListener('submit', async function(e)
     phone:       form.querySelector('input[type="tel"]').value,
     attending:   form.querySelector('input[name="att"]:checked').value,
     guests:      form.querySelector('select').value,
-    oonjal:     form.querySelector('input[name="ev_oonjal"]').checked  ? 'Yes' : 'No',
+    sangeet:     form.querySelector('input[name="ev_sangeet"]').checked  ? 'Yes' : 'No',
     muhurtham:    form.querySelector('input[name="ev_muhurtham"]').checked ? 'Yes' : 'No',
     message:     form.querySelector('textarea').value,
     submittedAt: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
