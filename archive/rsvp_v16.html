@@ -316,7 +316,7 @@ body::after{
         <span class="lbl">Kindly RSVP</span>
         <p class="names">Shreya <em>&amp;</em> Aditya</p>
         <p class="sub" id="headerSub">The Peacock Grove, Bengaluru &nbsp;&middot;&nbsp; 30 August 2026</p>
-      </div>
+        </div>
 
       <div class="divr"><span class="divr-gem"></span></div>
 
@@ -523,103 +523,111 @@ document.getElementById('rsvpForm').addEventListener('submit', async function(e)
   const form = e.target;                          /* ← must be first */
   const btn  = document.getElementById('submitBtn');
 
-  /* ── VALIDATION (kept outside any try/catch that could hide the form —
-       this must always be able to show its result, no matter what) ── */
-  const attCheckedEl = form.querySelector('input[name="att"]:checked');
-  const firstName  = form.firstName.value.trim();
-  const lastName   = form.lastName.value.trim();
-  const email      = form.email.value.trim();
-  const attending  = attCheckedEl ? attCheckedEl.value : 'yes';
-  const guestsRaw  = form.guests.value;
-  const emailValid = EMAIL_RE.test(email);
-  /* Guests only matters if the guest is actually coming */
-  const guestsOk   = attending === 'no' || !!guestsRaw;
-  const guests     = attending === 'no' ? (guestsRaw || '0') : guestsRaw;
-
-  const allValid = firstName && lastName && email && emailValid && guestsOk;
-
-  if (!allValid) {
-    let firstInvalidEl = null;
-    [
-      [form.firstName, !!firstName],
-      [form.lastName,  !!lastName],
-      [form.email,     !!email && emailValid],
-      [form.guests,    guestsOk],
-    ].forEach(([el, ok]) => {
-      el.style.borderColor = ok ? '' : 'rgba(180,60,40,0.6)';
-      el.style.background  = ok ? '' : 'rgba(255,235,230,0.9)';
-      if (!ok) {
-        if (!firstInvalidEl) firstInvalidEl = el;
-        el.addEventListener('input', () => {
-          el.style.borderColor = '';
-          el.style.background  = '';
-        }, { once: true });
-      }
-    });
-
-    const msg = document.getElementById('validationMsg');
-    msg.textContent = (!email || !emailValid)
-      ? 'Please enter a valid email address, your name, and (if attending) your guest count.'
-      : 'Please enter your name and number of guests before submitting.';
-    msg.style.display = 'block';
-
-    /* Bring the first problem field into view — purely cosmetic, so any
-       failure here (unsupported API, odd layout, etc.) must never take
-       down the red borders / message we just showed. Isolated on purpose. */
-    try {
-      const scrollTarget = firstInvalidEl || msg;
-      if (typeof scrollTarget.scrollIntoView === 'function') {
-        scrollTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-      if (firstInvalidEl && typeof firstInvalidEl.focus === 'function') {
-        firstInvalidEl.focus({ preventScroll: true });
-      }
-    } catch (scrollErr) { /* ignore — the red borders and message are already visible */ }
-
-    return;
-  }
-
-  document.getElementById('validationMsg').style.display = 'none';
-  btn.textContent = 'Sending…';
-  btn.disabled    = true;
-
-  const data = {
-    firstName:   firstName,
-    lastName:    lastName,
-    email:       email,
-    phone:       form.phone.value.trim(),
-    attending:   attending,
-    guests:      guests,
-    eventType:   isWeekend ? 'Weekend' : 'Sunday',
-    sangeet:     isWeekend && form.ev_sangeet.checked  ? 'Yes' : 'No',
-    oonjal:      form.ev_oonjal.checked    ? 'Yes' : 'No',
-    muhurtham:   form.ev_muhurtham.checked ? 'Yes' : 'No',
-    message:     form.message.value.trim(),
-    submittedAt: new Date().toLocaleString('en-IN', {timeZone:'Asia/Kolkata'}),
-  };
-
   try {
-    const response = await fetch(SCRIPT_URL, {
-      method:  'POST',
-      headers: {'Content-Type':'application/json'},
-      body:    JSON.stringify(data),
-    });
-    const result = await response.json();
-    if (result.result !== 'ok') throw new Error('error');
+    /* ── VALIDATION ── */
+    const attCheckedEl = form.querySelector('input[name="att"]:checked');
+    const firstName  = form.firstName.value.trim();
+    const lastName   = form.lastName.value.trim();
+    const email      = form.email.value.trim();
+    const attending  = attCheckedEl ? attCheckedEl.value : 'yes';
+    const guestsRaw  = form.guests.value;
+    const emailValid = EMAIL_RE.test(email);
+    /* Guests only matters if the guest is actually coming */
+    const guestsOk   = attending === 'no' || !!guestsRaw;
+    const guests     = attending === 'no' ? (guestsRaw || '0') : guestsRaw;
 
-    /* Personalise the success screen */
-    document.getElementById('successName').textContent = firstName;
-    document.getElementById('successGuests').textContent =
-      guests === '1' ? 'your seat is reserved' : `seats for ${guests} are reserved`;
+    const allValid = firstName && lastName && email && emailValid && guestsOk;
 
+    if (!allValid) {
+      let firstInvalidEl = null;
+      [
+        [form.firstName, !!firstName],
+        [form.lastName,  !!lastName],
+        [form.email,     !!email && emailValid],
+        [form.guests,    guestsOk],
+      ].forEach(([el, ok]) => {
+        el.style.borderColor = ok ? '' : 'rgba(180,60,40,0.6)';
+        el.style.background  = ok ? '' : 'rgba(255,235,230,0.9)';
+        if (!ok) {
+          if (!firstInvalidEl) firstInvalidEl = el;
+          el.addEventListener('input', () => {
+            el.style.borderColor = '';
+            el.style.background  = '';
+          }, { once: true });
+        }
+      });
+
+      const msg = document.getElementById('validationMsg');
+      msg.textContent = (!email || !emailValid)
+        ? 'Please enter a valid email address, your name, and (if attending) your guest count.'
+        : 'Please enter your name and number of guests before submitting.';
+      msg.style.display = 'block';
+
+      /* The weekend layout is taller than one screen, so a guest who hasn't
+         scrolled down may never see this message or the highlighted field.
+         Bring the first problem field into view and focus it. */
+      if (firstInvalidEl) {
+        if (typeof firstInvalidEl.scrollIntoView === 'function') {
+          firstInvalidEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        firstInvalidEl.focus({ preventScroll: true });
+      } else if (typeof msg.scrollIntoView === 'function') {
+        msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+
+      return;
+    }
+
+    document.getElementById('validationMsg').style.display = 'none';
+    btn.textContent = 'Sending…';
+    btn.disabled    = true;
+
+    const data = {
+      firstName:   firstName,
+      lastName:    lastName,
+      email:       email,
+      phone:       form.phone.value.trim(),
+      attending:   attending,
+      guests:      guests,
+      eventType:   isWeekend ? 'Weekend' : 'Sunday',
+      sangeet:     isWeekend && form.ev_sangeet.checked  ? 'Yes' : 'No',
+      oonjal:      form.ev_oonjal.checked    ? 'Yes' : 'No',
+      muhurtham:   form.ev_muhurtham.checked ? 'Yes' : 'No',
+      message:     form.message.value.trim(),
+      submittedAt: new Date().toLocaleString('en-IN', {timeZone:'Asia/Kolkata'}),
+    };
+
+    try {
+      const response = await fetch(SCRIPT_URL, {
+        method:  'POST',
+        headers: {'Content-Type':'application/json'},
+        body:    JSON.stringify(data),
+      });
+      const result = await response.json();
+      if (result.result !== 'ok') throw new Error('error');
+
+      /* Personalise the success screen */
+      document.getElementById('successName').textContent = firstName;
+      document.getElementById('successGuests').textContent =
+        guests === '1' ? 'your seat is reserved' : `seats for ${guests} are reserved`;
+
+      form.style.display = 'none';
+      document.getElementById('rsvpSuccess').style.display = 'block';
+
+    } catch(err) {
+      form.style.display = 'none';
+      const fb = document.getElementById('rsvpFallback');
+      fb.style.display = 'block';
+      fb.querySelector('.fallback-send').onclick = () => openMailtoFallback(data);
+    }
+
+  } catch (outerErr) {
+    /* Safety net: any unexpected runtime error (not just network failures)
+       lands here instead of silently failing or leaving the guest stuck. */
+    btn.textContent = 'Send RSVP';
+    btn.disabled    = false;
     form.style.display = 'none';
-    document.getElementById('rsvpSuccess').style.display = 'block';
-
-  } catch(err) {
-    form.style.display = 'none';
-    const fb = document.getElementById('rsvpFallback');
-    fb.style.display = 'block';
-    fb.querySelector('.fallback-send').onclick = () => openMailtoFallback(data);
+    document.getElementById('rsvpFallback').style.display = 'block';
   }
 });
 /* ── DYNAMIC CALENDAR GENERATION ──

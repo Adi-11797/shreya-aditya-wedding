@@ -255,28 +255,6 @@ body::after{
   color:var(--gold);font-size:1.1rem;margin-top:0.8rem;display:block;
 }
 
-/* ── VENUE FOOTER ── */
-.venue-footer{
-  display:flex;align-items:center;justify-content:center;gap:0.55rem;
-  margin-top:clamp(0.9rem,2vh,1.4rem);
-  padding-top:clamp(0.7rem,1.5vh,1rem);
-  border-top:1px solid rgba(184,134,42,0.18);
-}
-.venue-label{
-  font-family:'Cormorant SC',serif;font-weight:300;
-  font-size:0.56rem;letter-spacing:0.28em;color:var(--txt-lt);
-}
-.venue-link{
-  display:inline-flex;align-items:center;gap:0.38rem;
-  font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:clamp(0.82rem,1.3vw,0.95rem);color:var(--brown-mid);
-  text-decoration:none;border-bottom:1px solid rgba(184,134,42,0.3);
-  padding-bottom:1px;transition:color 0.2s,border-color 0.2s;
-}
-.venue-link:hover{color:var(--gold);border-color:var(--gold);}
-.venue-link svg{flex-shrink:0;opacity:0.65;transition:opacity 0.2s;}
-.venue-link:hover svg{opacity:1;}
-
 /* ── SATURDAY SECTION (hidden by default) ── */
 .saturday-section{display:none;}
 .saturday-section.visible{display:block;}
@@ -321,7 +299,7 @@ body::after{
       <div class="divr"><span class="divr-gem"></span></div>
 
       <!-- Form -->
-      <form id="rsvpForm" novalidate onsubmit="return false;">
+      <form id="rsvpForm" novalidate>
         <div class="form-grid">
 
           <!-- Name row -->
@@ -373,6 +351,7 @@ body::after{
 
             <!-- Saturday events (weekend only) -->
             <div class="saturday-section" id="saturdaySection">
+              <!-- <span class="event-day-label">Saturday · 29 August 2026</span> -->
               <div class="check-block" style="margin-bottom:0.55rem;grid-template-columns:1fr;">
                 <label><input type="checkbox" name="ev_sangeet" value="yes"> Sangeet &mdash; 29 August, 8:00 PM</label>
               </div>
@@ -380,6 +359,7 @@ body::after{
 
             <!-- Sunday events (always shown) -->
             <div id="sundaySection">
+              <!-- <span class="event-day-label" id="sundayLabel" style="display:none;">Sunday · 30 August 2026</span> -->
               <div class="check-block" style="grid-template-columns:1fr;">
                 <label><input type="checkbox" name="ev_oonjal" value="yes" unchecked> Oonjal &mdash; 30 August, 8:00 AM</label>
                 <label><input type="checkbox" name="ev_muhurtham" value="yes" unchecked> Muhurtham &mdash; 30 August, 11:00 AM</label>
@@ -427,21 +407,6 @@ body::after{
         <h3 style="font-size:1.5rem;">Something went wrong</h3>
         <p>Our form couldn't submit right now. Please email your RSVP instead.</p>
         <button class="sub-btn fallback-send" style="margin-top:1rem;">Send via Email</button>
-      </div>
-
-      <!-- Venue / Directions -->
-      <div class="venue-footer">
-        <span class="venue-label">Venue</span>
-        <a class="venue-link"
-           href="https://maps.google.com/?q=Peacock+Grove+Bengaluru"
-           target="_blank" rel="noopener">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-               stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
-            <circle cx="12" cy="9" r="2.5"/>
-          </svg>
-          The Peacock Grove, Bengaluru
-        </a>
       </div>
 
     </div><!-- /card-inner -->
@@ -523,13 +488,11 @@ document.getElementById('rsvpForm').addEventListener('submit', async function(e)
   const form = e.target;                          /* ← must be first */
   const btn  = document.getElementById('submitBtn');
 
-  /* ── VALIDATION (kept outside any try/catch that could hide the form —
-       this must always be able to show its result, no matter what) ── */
-  const attCheckedEl = form.querySelector('input[name="att"]:checked');
+  /* ── VALIDATION ── */
   const firstName  = form.firstName.value.trim();
   const lastName   = form.lastName.value.trim();
   const email      = form.email.value.trim();
-  const attending  = attCheckedEl ? attCheckedEl.value : 'yes';
+  const attending  = form.querySelector('input[name="att"]:checked').value;
   const guestsRaw  = form.guests.value;
   const emailValid = EMAIL_RE.test(email);
   /* Guests only matters if the guest is actually coming */
@@ -539,7 +502,6 @@ document.getElementById('rsvpForm').addEventListener('submit', async function(e)
   const allValid = firstName && lastName && email && emailValid && guestsOk;
 
   if (!allValid) {
-    let firstInvalidEl = null;
     [
       [form.firstName, !!firstName],
       [form.lastName,  !!lastName],
@@ -549,7 +511,6 @@ document.getElementById('rsvpForm').addEventListener('submit', async function(e)
       el.style.borderColor = ok ? '' : 'rgba(180,60,40,0.6)';
       el.style.background  = ok ? '' : 'rgba(255,235,230,0.9)';
       if (!ok) {
-        if (!firstInvalidEl) firstInvalidEl = el;
         el.addEventListener('input', () => {
           el.style.borderColor = '';
           el.style.background  = '';
@@ -562,20 +523,6 @@ document.getElementById('rsvpForm').addEventListener('submit', async function(e)
       ? 'Please enter a valid email address, your name, and (if attending) your guest count.'
       : 'Please enter your name and number of guests before submitting.';
     msg.style.display = 'block';
-
-    /* Bring the first problem field into view — purely cosmetic, so any
-       failure here (unsupported API, odd layout, etc.) must never take
-       down the red borders / message we just showed. Isolated on purpose. */
-    try {
-      const scrollTarget = firstInvalidEl || msg;
-      if (typeof scrollTarget.scrollIntoView === 'function') {
-        scrollTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-      if (firstInvalidEl && typeof firstInvalidEl.focus === 'function') {
-        firstInvalidEl.focus({ preventScroll: true });
-      }
-    } catch (scrollErr) { /* ignore — the red borders and message are already visible */ }
-
     return;
   }
 
@@ -677,12 +624,11 @@ function downloadCalendar() {
     },
   ];
 
-  /* Only export events the guest has explicitly checked.
-     If nothing is checked, do nothing. */
+  /* Include events that are visible AND checked.
+     If nothing is checked, include all visible events. */
   const visible  = allEvents.filter(ev => ev.show);
   const selected = visible.filter(ev => ev.check && ev.check.checked);
-  if (selected.length === 0) return;
-  const toExport = selected;
+  const toExport = selected.length > 0 ? selected : visible;
 
   const vevents = toExport.map(ev =>
     makeVEvent(

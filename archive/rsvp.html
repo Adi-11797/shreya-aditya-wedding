@@ -82,13 +82,19 @@ body::after{
   backdrop-filter:blur(14px);
   -webkit-backdrop-filter:blur(14px);
   border:1px solid rgba(184,134,42,0.28);
-  outline:1px solid rgba(184,134,42,0.13);
-  outline-offset:-10px;
   box-shadow:0 32px 100px rgba(59,30,7,0.22),0 4px 20px rgba(59,30,7,0.12);
+  /* Thin inner border */
   position:relative;
   animation:cardIn 0.85s cubic-bezier(0.22,1,0.36,1) both;
 }
-.card::before{display:none;}
+.card::before{
+  content:'';
+  position:absolute;
+  inset:10px;
+  border:1px solid rgba(184,134,42,0.13);
+  pointer-events:none;
+  z-index:0;
+}
 @keyframes cardIn{
   from{opacity:0;transform:translateY(16px) scale(0.988);}
   to{opacity:1;transform:translateY(0) scale(1);}
@@ -255,43 +261,6 @@ body::after{
   color:var(--gold);font-size:1.1rem;margin-top:0.8rem;display:block;
 }
 
-/* ── VENUE FOOTER ── */
-.venue-footer{
-  display:flex;align-items:center;justify-content:center;gap:0.55rem;
-  margin-top:clamp(0.9rem,2vh,1.4rem);
-  padding-top:clamp(0.7rem,1.5vh,1rem);
-  border-top:1px solid rgba(184,134,42,0.18);
-}
-.venue-label{
-  font-family:'Cormorant SC',serif;font-weight:300;
-  font-size:0.56rem;letter-spacing:0.28em;color:var(--txt-lt);
-}
-.venue-link{
-  display:inline-flex;align-items:center;gap:0.38rem;
-  font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:clamp(0.82rem,1.3vw,0.95rem);color:var(--brown-mid);
-  text-decoration:none;border-bottom:1px solid rgba(184,134,42,0.3);
-  padding-bottom:1px;transition:color 0.2s,border-color 0.2s;
-}
-.venue-link:hover{color:var(--gold);border-color:var(--gold);}
-.venue-link svg{flex-shrink:0;opacity:0.65;transition:opacity 0.2s;}
-.venue-link:hover svg{opacity:1;}
-
-/* ── SATURDAY SECTION (hidden by default) ── */
-.saturday-section{display:none;}
-.saturday-section.visible{display:block;}
-
-/* ── EVENT GROUP HEADER ── */
-.event-day-label{
-  font-family:'Cormorant SC',serif;font-weight:300;
-  font-size:0.52rem;letter-spacing:0.32em;color:var(--txt-lt);
-  display:block;margin-bottom:0.4rem;padding-bottom:0.25rem;
-  border-bottom:1px solid rgba(184,134,42,0.15);
-}
-
-/* ── DIMMED WHEN DECLINING ── */
-.is-disabled{opacity:0.4;pointer-events:none;}
-
 /* ── RESPONSIVE ── */
 @media(max-width:600px){
   .form-grid{grid-template-columns:1fr;}
@@ -315,33 +284,33 @@ body::after{
       <div class="header">
         <span class="lbl">Kindly RSVP</span>
         <p class="names">Shreya <em>&amp;</em> Aditya</p>
-        <p class="sub" id="headerSub">The Peacock Grove, Bengaluru &nbsp;&middot;&nbsp; 30 August 2026</p>
+        <p class="sub">The Peacock Grove, Bengaluru &nbsp;&middot;&nbsp; 30 August 2026</p>
       </div>
 
       <div class="divr"><span class="divr-gem"></span></div>
 
       <!-- Form -->
-      <form id="rsvpForm" novalidate onsubmit="return false;">
+      <form id="rsvpForm" novalidate>
         <div class="form-grid">
 
           <!-- Name row -->
           <div class="f-group">
             <label>First Name</label>
-            <input type="text" name="firstName" placeholder="Ananya" maxlength="80" required>
+            <input type="text" name="firstName" placeholder="Ananya" required>
           </div>
           <div class="f-group">
             <label>Last Name</label>
-            <input type="text" name="lastName" placeholder="Bhat" maxlength="80" required>
+            <input type="text" name="lastName" placeholder="Bhat" required>
           </div>
 
           <!-- Email + Phone -->
           <div class="f-group">
             <label>Email Address</label>
-            <input type="email" name="email" placeholder="ananya@example.com" maxlength="120" required>
+            <input type="email" name="email" placeholder="ananya@example.com" required>
           </div>
           <div class="f-group">
             <label>Phone Number</label>
-            <input type="tel" name="phone" placeholder="+91 98765 43210" maxlength="20">
+            <input type="tel" name="phone" placeholder="+91 98765 43210">
           </div>
 
           <!-- Attending toggle — half width -->
@@ -356,7 +325,7 @@ body::after{
           </div>
 
           <!-- Guests — half width -->
-          <div class="f-group" id="guestsField">
+          <div class="f-group">
             <label>Number of Guests</label>
             <select name="guests">
               <option value="">Please select</option>
@@ -367,43 +336,27 @@ body::after{
             </select>
           </div>
 
-          <!-- Events — full width -->
-          <div class="f-group span-2" id="eventsField">
+          <!-- Events — full width, side-by-side checkboxes -->
+          <div class="f-group span-2">
             <label>Which events will you attend?</label>
-
-            <!-- Saturday events (weekend only) -->
-            <div class="saturday-section" id="saturdaySection">
-              <div class="check-block" style="margin-bottom:0.55rem;grid-template-columns:1fr;">
-                <label><input type="checkbox" name="ev_sangeet" value="yes"> Sangeet &mdash; 29 August, 8:00 PM</label>
-              </div>
-            </div>
-
-            <!-- Sunday events (always shown) -->
-            <div id="sundaySection">
-              <div class="check-block" style="grid-template-columns:1fr;">
-                <label><input type="checkbox" name="ev_oonjal" value="yes" unchecked> Oonjal &mdash; 30 August, 8:00 AM</label>
-                <label><input type="checkbox" name="ev_muhurtham" value="yes" unchecked> Muhurtham &mdash; 30 August, 11:00 AM</label>
-              </div>
+            <div class="check-block">
+              <label><input type="checkbox" name="ev_oonjal" value="yes" unchecked> Oonjal &mdash; 30 August, 8:00 AM</label>
+              <label><input type="checkbox" name="ev_muhurtham" value="yes" unchecked> Muhurtham &mdash; 30 August, 11:00 AM</label>
             </div>
           </div>
 
           <!-- Message — full width -->
           <div class="f-group span-2">
             <label>A message for the couple</label>
-            <textarea name="message" placeholder="Share your heartfelt wishes…" maxlength="600"></textarea>
+            <textarea name="message" placeholder="Share your heartfelt wishes…"></textarea>
           </div>
 
         </div><!-- /form-grid -->
 
         <div class="submit-row">
           <button type="submit" class="sub-btn" id="submitBtn">Send RSVP</button>
-          <button type="button" class="cal-btn" onclick="downloadCalendar()">Add to Calendar</button>
+          <button type="button" class="cal-btn" onclick="window.location.href='calendar.ics'">Add to Calendar</button>
         </div>
-        <p id="validationMsg" style="display:none;text-align:center;margin-top:0.6rem;
-           font-family:'Cormorant Garamond',serif;font-style:italic;
-           font-size:0.9rem;color:rgba(160,50,30,0.85);">
-          Please enter your name and number of guests before submitting.
-        </p>
       </form>
 
       <!-- Success -->
@@ -412,8 +365,8 @@ body::after{
           <circle cx="24" cy="24" r="22" fill="none" stroke="#b8862a" stroke-width="1"/>
           <path d="M12 24 L20 32 L36 16" stroke="#b8862a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        <h3>Thank you, <span id="successName"></span></h3>
-        <p>Your RSVP has been received &mdash; <span id="successGuests"></span>.<br>We look forward to celebrating with you.</p>
+        <h3>Thank you</h3>
+        <p>Your RSVP has been received.<br>We look forward to celebrating with you.</p>
         <span class="sig">&mdash; Shreya &amp; Aditya</span>
       </div>
 
@@ -429,59 +382,19 @@ body::after{
         <button class="sub-btn fallback-send" style="margin-top:1rem;">Send via Email</button>
       </div>
 
-      <!-- Venue / Directions -->
-      <div class="venue-footer">
-        <span class="venue-label">Venue</span>
-        <a class="venue-link"
-           href="https://maps.google.com/?q=Peacock+Grove+Bengaluru"
-           target="_blank" rel="noopener">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-               stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
-            <circle cx="12" cy="9" r="2.5"/>
-          </svg>
-          The Peacock Grove, Bengaluru
-        </a>
-      </div>
-
     </div><!-- /card-inner -->
   </div><!-- /card -->
 </div><!-- /page -->
 
 <script>
-/* ── CONFIG ── */
-const SCRIPT_URL   = 'https://script.google.com/macros/s/AKfycbzwiGLO7m3Ooxdc5lCPFankcbPZoCTUxLxhC7H0UvkCd7Jjev3j-ljXnXZJV73TzlNtog/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzwiGLO7m3Ooxdc5lCPFankcbPZoCTUxLxhC7H0UvkCd7Jjev3j-ljXnXZJV73TzlNtog/exec';
 const FALLBACK_EMAIL = 'adityaramakrishnan11@gmail.com';
 
-/* ── DETECT EVENT TYPE FROM URL ──
-     ?event=weekend  → show Saturday events
-     anything else   → Sunday only (default)                   */
-const params    = new URLSearchParams(window.location.search);
-const isWeekend = params.get('event') === 'weekend';
-
-if (isWeekend) {
-  /* Show Saturday section */
-  document.getElementById('saturdaySection').classList.add('visible');
-  /* Show "Sunday" sub-label so it's clear which row is which */
-  document.getElementById('sundayLabel').style.display = 'block';
-  /* Update header */
-  document.getElementById('headerSub').textContent =
-    'The Peacock Grove, Bengaluru  ·  29 – 30 August 2026';
-  document.getElementById('eventBadge').style.display = 'inline-block';
-}
-
-/* ── FALLBACK EMAIL ── */
 function openMailtoFallback(data) {
-  const sundayEvents = [
-    data.oonjal     === 'Yes' ? 'Oonjal'     : null,
-    data.muhurtham  === 'Yes' ? 'Muhurtham'  : null,
-  ].filter(Boolean);
-
-  const saturdayEvents = isWeekend ? [
-    data.sangeet  === 'Yes' ? 'Sangeet'  : null,
-  ].filter(Boolean) : [];
-
-  const allEvents = [...saturdayEvents, ...sundayEvents].join(', ') || 'None';
+  const events = [
+    data.oonjal  === 'Yes' ? 'Oonjal'  : null,
+    data.muhurtham === 'Yes' ? 'Muhurtham' : null,
+  ].filter(Boolean).join(', ') || 'None';
 
   const body = [
     `Name: ${data.firstName} ${data.lastName}`,
@@ -489,8 +402,7 @@ function openMailtoFallback(data) {
     `Phone: ${data.phone}`,
     `Attending: ${data.attending}`,
     `Guests: ${data.guests}`,
-    `Invite type: ${data.eventType}`,
-    `Events: ${allEvents}`,
+    `Events: ${events}`,
     `Message: ${data.message || '—'}`,
     `Submitted: ${data.submittedAt}`,
   ].join('\n');
@@ -501,223 +413,47 @@ function openMailtoFallback(data) {
     + `&body=${encodeURIComponent(body)}`;
 }
 
-/* ── ATTENDING TOGGLE: dim + stop requiring guests/events when declining ── */
-const guestsField = document.getElementById('guestsField');
-const eventsField = document.getElementById('eventsField');
-
-function updateAttendingUI() {
-  const declining = document.getElementById('a-no').checked;
-  guestsField.classList.toggle('is-disabled', declining);
-  eventsField.classList.toggle('is-disabled', declining);
-}
-document.getElementById('a-yes').addEventListener('change', updateAttendingUI);
-document.getElementById('a-no').addEventListener('change', updateAttendingUI);
-updateAttendingUI();
-
-/* ── FORM SUBMIT ── */
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
 document.getElementById('rsvpForm').addEventListener('submit', async function(e) {
   e.preventDefault();
 
-  const form = e.target;                          /* ← must be first */
-  const btn  = document.getElementById('submitBtn');
-
-  /* ── VALIDATION (kept outside any try/catch that could hide the form —
-       this must always be able to show its result, no matter what) ── */
-  const attCheckedEl = form.querySelector('input[name="att"]:checked');
-  const firstName  = form.firstName.value.trim();
-  const lastName   = form.lastName.value.trim();
-  const email      = form.email.value.trim();
-  const attending  = attCheckedEl ? attCheckedEl.value : 'yes';
-  const guestsRaw  = form.guests.value;
-  const emailValid = EMAIL_RE.test(email);
-  /* Guests only matters if the guest is actually coming */
-  const guestsOk   = attending === 'no' || !!guestsRaw;
-  const guests     = attending === 'no' ? (guestsRaw || '0') : guestsRaw;
-
-  const allValid = firstName && lastName && email && emailValid && guestsOk;
-
-  if (!allValid) {
-    let firstInvalidEl = null;
-    [
-      [form.firstName, !!firstName],
-      [form.lastName,  !!lastName],
-      [form.email,     !!email && emailValid],
-      [form.guests,    guestsOk],
-    ].forEach(([el, ok]) => {
-      el.style.borderColor = ok ? '' : 'rgba(180,60,40,0.6)';
-      el.style.background  = ok ? '' : 'rgba(255,235,230,0.9)';
-      if (!ok) {
-        if (!firstInvalidEl) firstInvalidEl = el;
-        el.addEventListener('input', () => {
-          el.style.borderColor = '';
-          el.style.background  = '';
-        }, { once: true });
-      }
-    });
-
-    const msg = document.getElementById('validationMsg');
-    msg.textContent = (!email || !emailValid)
-      ? 'Please enter a valid email address, your name, and (if attending) your guest count.'
-      : 'Please enter your name and number of guests before submitting.';
-    msg.style.display = 'block';
-
-    /* Bring the first problem field into view — purely cosmetic, so any
-       failure here (unsupported API, odd layout, etc.) must never take
-       down the red borders / message we just showed. Isolated on purpose. */
-    try {
-      const scrollTarget = firstInvalidEl || msg;
-      if (typeof scrollTarget.scrollIntoView === 'function') {
-        scrollTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-      if (firstInvalidEl && typeof firstInvalidEl.focus === 'function') {
-        firstInvalidEl.focus({ preventScroll: true });
-      }
-    } catch (scrollErr) { /* ignore — the red borders and message are already visible */ }
-
-    return;
-  }
-
-  document.getElementById('validationMsg').style.display = 'none';
+  const btn = document.getElementById('submitBtn');
   btn.textContent = 'Sending…';
-  btn.disabled    = true;
+  btn.disabled = true;
 
+  const form = e.target;
   const data = {
-    firstName:   firstName,
-    lastName:    lastName,
-    email:       email,
+    firstName:   form.firstName.value.trim(),
+    lastName:    form.lastName.value.trim(),
+    email:       form.email.value.trim(),
     phone:       form.phone.value.trim(),
-    attending:   attending,
-    guests:      guests,
-    eventType:   isWeekend ? 'Weekend' : 'Sunday',
-    sangeet:     isWeekend && form.ev_sangeet.checked  ? 'Yes' : 'No',
-    oonjal:      form.ev_oonjal.checked    ? 'Yes' : 'No',
-    muhurtham:   form.ev_muhurtham.checked ? 'Yes' : 'No',
+    attending:   form.querySelector('input[name="att"]:checked').value,
+    guests:      form.guests.value,
+    oonjal:     form.ev_oonjal.checked  ? 'Yes' : 'No',
+    muhurtham:    form.ev_muhurtham.checked ? 'Yes' : 'No',
     message:     form.message.value.trim(),
     submittedAt: new Date().toLocaleString('en-IN', {timeZone:'Asia/Kolkata'}),
   };
 
   try {
     const response = await fetch(SCRIPT_URL, {
-      method:  'POST',
-      headers: {'Content-Type':'application/json'},
-      body:    JSON.stringify(data),
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(data),
     });
     const result = await response.json();
-    if (result.result !== 'ok') throw new Error('error');
-
-    /* Personalise the success screen */
-    document.getElementById('successName').textContent = firstName;
-    document.getElementById('successGuests').textContent =
-      guests === '1' ? 'your seat is reserved' : `seats for ${guests} are reserved`;
+    if(result.result !== 'ok') throw new Error('error');
 
     form.style.display = 'none';
     document.getElementById('rsvpSuccess').style.display = 'block';
 
   } catch(err) {
-    form.style.display = 'none';
+    btn.textContent = 'Send RSVP';
+    btn.disabled = false;
     const fb = document.getElementById('rsvpFallback');
     fb.style.display = 'block';
     fb.querySelector('.fallback-send').onclick = () => openMailtoFallback(data);
   }
 });
-/* ── DYNAMIC CALENDAR GENERATION ──
-   Builds an .ics with only the events the guest has ticked.
-   If nothing is ticked, falls back to all events for their invite type. */
-
-function icsDate(dateStr, timeStr) {
-  /* Use local IST time directly with TZID — no UTC conversion needed */
-  return `TZID=Asia/Kolkata:${dateStr}T${timeStr.replace(':','')}00`;
-}
-
-function makeVEvent(uid, summary, dtstart, dtend, location, description) {
-  return [
-    'BEGIN:VEVENT',
-    `UID:${uid}`,
-    `SUMMARY:${summary}`,
-    `DTSTART;${dtstart}`,
-    `DTEND;${dtend}`,
-    `LOCATION:${location}`,
-    `DESCRIPTION:${description}`,
-    'END:VEVENT',
-  ].join('\r\n');
-}
-
-function downloadCalendar() {
-  const form = document.getElementById('rsvpForm');
-  const VENUE = 'The Peacock Grove\\, Bengaluru';
-  const DESC  = 'Wedding celebration of Shreya & Aditya';
-
-  /* Times match form labels exactly */
-  const allEvents = [
-    {
-      id:      'sangeet',
-      check:   form.ev_sangeet,
-      show:    isWeekend,
-      summary: 'Sangeet — Shreya & Aditya',
-      start:   icsDate('20260829', '20:00'),   /* 8:00 PM IST */
-      end:     icsDate('20260829', '20:30'),
-    },
-    {
-      id:      'oonjal',
-      check:   form.ev_oonjal,
-      show:    true,
-      summary: 'Oonjal — Shreya & Aditya',
-      start:   icsDate('20260830', '08:00'),   /* 8:00 AM IST */
-      end:     icsDate('20260830', '08:30'),
-    },
-    {
-      id:      'muhurtham',
-      check:   form.ev_muhurtham,
-      show:    true,
-      summary: 'Muhurtham — Shreya & Aditya',
-      start:   icsDate('20260830', '11:00'),   /* 11:00 AM IST */
-      end:     icsDate('20260830', '11:30'),
-    },
-  ];
-
-  /* Only export events the guest has explicitly checked.
-     If nothing is checked, do nothing. */
-  const visible  = allEvents.filter(ev => ev.show);
-  const selected = visible.filter(ev => ev.check && ev.check.checked);
-  if (selected.length === 0) return;
-  const toExport = selected;
-
-  const vevents = toExport.map(ev =>
-    makeVEvent(
-      `${ev.id}-shreya-aditya-2026@wedding`,
-      ev.summary, ev.start, ev.end, VENUE, DESC
-    )
-  ).join('\r\n');
-
-  const ics = [
-    'BEGIN:VCALENDAR',
-    'VERSION:2.0',
-    'PRODID:-//Shreya & Aditya Wedding//EN',
-    'CALSCALE:GREGORIAN',
-    'METHOD:PUBLISH',
-    'BEGIN:VTIMEZONE',
-    'TZID:Asia/Kolkata',
-    'BEGIN:STANDARD',
-    'TZOFFSETFROM:+0530',
-    'TZOFFSETTO:+0530',
-    'TZNAME:IST',
-    'DTSTART:19700101T000000',
-    'END:STANDARD',
-    'END:VTIMEZONE',
-    vevents,
-    'END:VCALENDAR',
-  ].join('\r\n');
-
-  const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
-  const link = document.createElement('a');
-  link.href     = URL.createObjectURL(blob);
-  link.download = 'shreya-aditya-wedding.ics';
-  link.click();
-  URL.revokeObjectURL(link.href);
-}
 </script>
-
 </body>
 </html>
