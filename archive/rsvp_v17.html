@@ -277,6 +277,10 @@ body::after{
 .venue-link svg{flex-shrink:0;opacity:0.65;transition:opacity 0.2s;}
 .venue-link:hover svg{opacity:1;}
 
+/* ── SATURDAY SECTION (hidden by default) ── */
+.saturday-section{display:none;}
+.saturday-section.visible{display:block;}
+
 /* ── EVENT GROUP HEADER ── */
 .event-day-label{
   font-family:'Cormorant SC',serif;font-weight:300;
@@ -311,7 +315,7 @@ body::after{
       <div class="header">
         <span class="lbl">Kindly RSVP</span>
         <p class="names">Shreya <em>&amp;</em> Aditya</p>
-        <p class="sub" id="headerSub">The Peacock Grove, Bengaluru &nbsp;&middot;&nbsp; 29 &ndash; 30 August 2026</p>
+        <p class="sub" id="headerSub">The Peacock Grove, Bengaluru &nbsp;&middot;&nbsp; 30 August 2026</p>
       </div>
 
       <div class="divr"><span class="divr-gem"></span></div>
@@ -367,13 +371,21 @@ body::after{
           <div class="f-group span-2" id="eventsField">
             <label>Which events will you attend?</label>
 
-            <!-- Events — always shown together, one weekend -->
-            <div class="check-block" style="grid-template-columns:1fr;">
-              <label><input type="checkbox" name="ev_sangeet" value="yes" unchecked> Sangeet &mdash; 29 August, 8:00 PM</label>
-              <label><input type="checkbox" name="ev_oonjal" value="yes" unchecked> Oonjal &mdash; 30 August, 8:00 AM</label>
-              <label><input type="checkbox" name="ev_muhurtham" value="yes" unchecked> Muhurtham &mdash; 30 August, 11:00 AM</label>
+            <!-- Saturday events (weekend only) -->
+            <div class="saturday-section" id="saturdaySection">
+              <div class="check-block" style="margin-bottom:0.55rem;grid-template-columns:1fr;">
+                <label><input type="checkbox" name="ev_sangeet" value="yes"> Sangeet &mdash; 29 August, 8:00 PM</label>
               </div>
             </div>
+
+            <!-- Sunday events (always shown) -->
+            <div id="sundaySection">
+              <div class="check-block" style="grid-template-columns:1fr;">
+                <label><input type="checkbox" name="ev_oonjal" value="yes" unchecked> Oonjal &mdash; 30 August, 8:00 AM</label>
+                <label><input type="checkbox" name="ev_muhurtham" value="yes" unchecked> Muhurtham &mdash; 30 August, 11:00 AM</label>
+              </div>
+            </div>
+          </div>
 
           <!-- Message — full width -->
           <div class="f-group span-2">
@@ -441,6 +453,23 @@ body::after{
 const SCRIPT_URL   = 'https://script.google.com/macros/s/AKfycbzwiGLO7m3Ooxdc5lCPFankcbPZoCTUxLxhC7H0UvkCd7Jjev3j-ljXnXZJV73TzlNtog/exec';
 const FALLBACK_EMAIL = 'adityaramakrishnan11@gmail.com';
 
+/* ── DETECT EVENT TYPE FROM URL ──
+     ?event=weekend  → show Saturday events
+     anything else   → Sunday only (default)                   */
+const params    = new URLSearchParams(window.location.search);
+const isWeekend = params.get('event') === 'weekend';
+
+if (isWeekend) {
+  /* Show Saturday section */
+  document.getElementById('saturdaySection').classList.add('visible');
+  /* Show "Sunday" sub-label so it's clear which row is which */
+  document.getElementById('sundayLabel').style.display = 'block';
+  /* Update header */
+  document.getElementById('headerSub').textContent =
+    'The Peacock Grove, Bengaluru  ·  29 – 30 August 2026';
+  document.getElementById('eventBadge').style.display = 'inline-block';
+}
+
 /* ── FALLBACK EMAIL ── */
 function openMailtoFallback(data) {
   const sundayEvents = [
@@ -448,9 +477,9 @@ function openMailtoFallback(data) {
     data.muhurtham  === 'Yes' ? 'Muhurtham'  : null,
   ].filter(Boolean);
 
-  const saturdayEvents = [
+  const saturdayEvents = isWeekend ? [
     data.sangeet  === 'Yes' ? 'Sangeet'  : null,
-  ].filter(Boolean);
+  ].filter(Boolean) : [];
 
   const allEvents = [...saturdayEvents, ...sundayEvents].join(', ') || 'None';
 
@@ -561,8 +590,8 @@ document.getElementById('rsvpForm').addEventListener('submit', async function(e)
     phone:       form.phone.value.trim(),
     attending:   attending,
     guests:      guests,
-    eventType:   'Weekend',
-    sangeet:     form.ev_sangeet.checked   ? 'Yes' : 'No',
+    eventType:   isWeekend ? 'Weekend' : 'Sunday',
+    sangeet:     isWeekend && form.ev_sangeet.checked  ? 'Yes' : 'No',
     oonjal:      form.ev_oonjal.checked    ? 'Yes' : 'No',
     muhurtham:   form.ev_muhurtham.checked ? 'Yes' : 'No',
     message:     form.message.value.trim(),
@@ -625,7 +654,7 @@ function downloadCalendar() {
     {
       id:      'sangeet',
       check:   form.ev_sangeet,
-      show:    true,
+      show:    isWeekend,
       summary: 'Sangeet — Shreya & Aditya',
       start:   icsDate('20260829', '20:00'),   /* 8:00 PM IST */
       end:     icsDate('20260829', '20:30'),
