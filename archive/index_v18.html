@@ -535,10 +535,6 @@ footer .panel {
   font-size: 0.66rem; letter-spacing: 0.3em; color: var(--txt-lt);
 }
 
-/* ── DISABLED FIELD GROUP ── */
-.f-group.disabled { opacity: 0.35; pointer-events: none; transition: opacity 0.25s; }
-.f-group.disabled select { cursor: not-allowed; }
-
 @media(max-width:600px) {
   .f-row { grid-template-columns: 1fr; }
   .section { padding: 3rem 1.2rem; }
@@ -771,11 +767,11 @@ footer .panel {
 
     <form class="rsvp-form" id="rsvpForm">
       <div class="f-row">
-        <div class="f-group"><label>First Name</label><input type="text" name="firstName" placeholder="Ananya" required></div>
-        <div class="f-group"><label>Last Name</label><input type="text" name="lastName" placeholder="Bhat" required></div>
+        <div class="f-group"><label>First Name</label><input type="text" placeholder="Ananya" required></div>
+        <div class="f-group"><label>Last Name</label><input type="text" placeholder="Bhat" required></div>
       </div>
-      <div class="f-group"><label>Email Address</label><input type="email" name="email" placeholder="ananya@example.com" required></div>
-      <div class="f-group"><label>Phone Number</label><input type="tel" name="phone" placeholder="+91 98765 43210"></div>
+      <div class="f-group"><label>Email Address</label><input type="email" placeholder="ananya@example.com" required></div>
+      <div class="f-group"><label>Phone Number</label><input type="tel" placeholder="+91 98765 43210"></div>
       <div class="f-group">
         <label>Will you be attending?</label>
         <div class="toggle-row">
@@ -785,20 +781,17 @@ footer .panel {
           <label for="a-no" style="border-left:1px solid var(--panel-bdr);">Can't Make It</label>
         </div>
       </div>
-      <div class="f-group" id="guestGroup">
+      <div class="f-group">
         <label>Number of Guests</label>
-        <select id="guestCount" name="guests">
+        <select>
           <option value="">Please select</option>
           <option>1</option><option>2</option><option>3</option><option>4</option>
           <option>5</option><option>6</option><option>7</option><option>8</option>
           <option>9</option><option>10</option><option>11</option><option>12</option>
           <option>13</option><option>14</option><option>15</option><option>16+</option>
         </select>
-        <p id="guestError" style="display:none;color:rgba(160,50,30,0.85);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.88rem;margin-top:0.35rem;">
-          Please select your number of guests.
-        </p>
       </div>
-      <div class="f-group" id="eventsGroup">
+      <div class="f-group">
         <label>Which events will you attend?</label>
         <div class="check-block">
           <label><input type="checkbox" name="ev_muhurtham" value="yes" checked> Muhurtham &mdash; 30 August, 11:00 AM</label>
@@ -900,31 +893,13 @@ sections.forEach(id => {
 });
 
 /* ── RSVP ── */
-const SCRIPT_URL   = 'https://script.google.com/macros/s/AKfycbzwiGLO7m3Ooxdc5lCPFankcbPZoCTUxLxhC7H0UvkCd7Jjev3j-ljXnXZJV73TzlNtog/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzwiGLO7m3Ooxdc5lCPFankcbPZoCTUxLxhC7H0UvkCd7Jjev3j-ljXnXZJV73TzlNtog/exec';
 const FALLBACK_EMAIL = 'adityaramakrishnan11@gmail.com';
 
-/* ── Attending toggle: disable guest + events when "Can't Make It" ── */
-const attRadios   = document.querySelectorAll('input[name="att"]');
-const guestGroup  = document.getElementById('guestGroup');
-const eventsGroup = document.getElementById('eventsGroup');
-const guestSelect = document.getElementById('guestCount');
-
-function updateAttendingState() {
-  const attending = document.querySelector('input[name="att"]:checked').value;
-  const declining = attending === 'no';
-  guestGroup.classList.toggle('disabled', declining);
-  eventsGroup.classList.toggle('disabled', declining);
-  if (declining) {
-    guestSelect.value = '';
-    document.getElementById('guestError').style.display = 'none';
-    guestSelect.style.borderColor = '';
-  }
-}
-attRadios.forEach(r => r.addEventListener('change', updateAttendingState));
-
 function openMailtoFallback(data) {
-  const events = [ data.muhurtham === 'Yes' ? 'Muhurtham' : null ]
-    .filter(Boolean).join(', ') || 'None';
+  const events = [
+    data.muhurtham === 'Yes' ? 'Muhurtham'           : null,
+  ].filter(Boolean).join(', ') || 'None';
 
   const body = [
     `Name: ${data.firstName} ${data.lastName}`,
@@ -944,42 +919,28 @@ function openMailtoFallback(data) {
 
 document.getElementById('rsvpForm').addEventListener('submit', async function(e) {
   e.preventDefault();
-  const form      = e.target;
-  const attending = form.querySelector('input[name="att"]:checked').value;
-
-  /* ── Validate guest count only when attending ── */
-  if (attending === 'yes' && !guestSelect.value) {
-    guestSelect.style.borderColor = 'rgba(180,60,40,0.6)';
-    document.getElementById('guestError').style.display = 'block';
-    guestSelect.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    guestSelect.addEventListener('change', () => {
-      guestSelect.style.borderColor = '';
-      document.getElementById('guestError').style.display = 'none';
-    }, { once: true });
-    return;
-  }
-
-  const btn = form.querySelector('.sub-btn');
+  const btn = this.querySelector('.sub-btn');
   btn.textContent = 'Sending…';
   btn.disabled = true;
 
+  const form = e.target;
   const data = {
-    firstName:   form.firstName.value.trim(),
-    lastName:    form.lastName.value.trim(),
-    email:       form.email.value.trim(),
-    phone:       form.phone.value.trim(),
-    attending,
-    guests:      attending === 'yes' ? guestSelect.value : 'N/A',
-    muhurtham:   form.querySelector('input[name="ev_muhurtham"]').checked ? 'Yes' : 'No',
-    message:     form.querySelector('textarea').value.trim(),
+    firstName:   form.querySelector('input[placeholder="Ananya"]').value,
+    lastName:    form.querySelector('input[placeholder="Bhat"]').value,
+    email:       form.querySelector('input[type="email"]').value,
+    phone:       form.querySelector('input[type="tel"]').value,
+    attending:   form.querySelector('input[name="att"]:checked').value,
+    guests:      form.querySelector('select').value,
+    muhurtham:    form.querySelector('input[name="ev_muhurtham"]').checked ? 'Yes' : 'No',
+    message:     form.querySelector('textarea').value,
     submittedAt: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
   };
 
   try {
     const response = await fetch(SCRIPT_URL, {
-      method:  'POST',
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify(data)
+      body: JSON.stringify(data)
     });
     const result = await response.json();
     if (result.result !== 'ok') throw new Error('Script returned error');
@@ -992,7 +953,7 @@ document.getElementById('rsvpForm').addEventListener('submit', async function(e)
   } catch (err) {
     btn.textContent = 'Send RSVP';
     btn.disabled = false;
-    form.style.display = 'none';
+
     const fallback = document.getElementById('rsvpFallback');
     fallback.style.display = 'block';
     fallback.querySelector('.fallback-send').onclick = () => openMailtoFallback(data);

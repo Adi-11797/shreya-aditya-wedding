@@ -370,7 +370,6 @@ body::after{
             <!-- Events — always shown together, one weekend -->
             <div class="check-block" style="grid-template-columns:1fr;">
               <label><input type="checkbox" name="ev_sangeet" value="yes" unchecked> Sangeet &mdash; 29 August, 8:00 PM</label>
-              <label><input type="checkbox" name="ev_oonjal" value="yes" unchecked> Oonjal &mdash; 30 August, 8:00 AM</label>
               <label><input type="checkbox" name="ev_muhurtham" value="yes" unchecked> Muhurtham &mdash; 30 August, 11:00 AM</label>
               </div>
             </div>
@@ -444,7 +443,7 @@ const FALLBACK_EMAIL = 'adityaramakrishnan11@gmail.com';
 /* ── FALLBACK EMAIL ── */
 function openMailtoFallback(data) {
   const sundayEvents = [
-    data.oonjal     === 'Yes' ? 'Oonjal'     : null,
+    data.sangeet     === 'Yes' ? 'Sangeet'     : null,
     data.muhurtham  === 'Yes' ? 'Muhurtham'  : null,
   ].filter(Boolean);
 
@@ -563,7 +562,6 @@ document.getElementById('rsvpForm').addEventListener('submit', async function(e)
     guests:      guests,
     eventType:   'Weekend',
     sangeet:     form.ev_sangeet.checked   ? 'Yes' : 'No',
-    oonjal:      form.ev_oonjal.checked    ? 'Yes' : 'No',
     muhurtham:   form.ev_muhurtham.checked ? 'Yes' : 'No',
     message:     form.message.value.trim(),
     submittedAt: new Date().toLocaleString('en-IN', {timeZone:'Asia/Kolkata'}),
@@ -629,14 +627,6 @@ function downloadCalendar() {
       summary: 'Sangeet — Shreya & Aditya',
       start:   icsDate('20260829', '20:00'),   /* 8:00 PM IST */
       end:     icsDate('20260829', '20:30'),
-    },
-    {
-      id:      'oonjal',
-      check:   form.ev_oonjal,
-      show:    true,
-      summary: 'Oonjal — Shreya & Aditya',
-      start:   icsDate('20260830', '08:00'),   /* 8:00 AM IST */
-      end:     icsDate('20260830', '08:30'),
     },
     {
       id:      'muhurtham',
